@@ -2,7 +2,7 @@
     <option timestep="0.01" />
     <custom>
         <!-- brax custom params -->
-        <numeric data="1.0 0.0"
+        <numeric data="0.0 0.0 0.0 0.0"
             name="init_qpos" />
         <numeric data="1000" name="constraint_limit_stiffness" />
         <numeric data="4000" name="constraint_stiffness" />
@@ -19,15 +19,6 @@
         <default class="/" />
         <default class="0/" />
         <default class="0/1/" />
-        <default class="0/2/" />
-        <default class="0/2/3/" />
-        <default class="0/2/4/" />
-        <default class="0/2/4/5/" />
-        <default class="0/2/4/5/6/" />
-        <default class="0/2/4/5/7/" />
-        <default class="0/2/4/5/7/8/" />
-        <default class="0/2/4/5/7/8/9/" />
-        <default class="0/2/4/5/7/8/9/10/" />
     </default>
     <asset>
         <texture name="texplane" type="2d" builtin="checker"
@@ -78,9 +69,9 @@
         </body>
     </worldbody>
     <actuator>
-        <!-- <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="54"
+        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="54"
             joint="0/1/joint/" />
-        <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="64"
+        <!-- <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="64"
             joint="0/2/3/joint/" />
         <motor name="0/2/4/motor" class="0/2/4/" ctrllimited="true" ctrlrange="-1 1" gear="65"
             joint="0/2/4/joint/" />
