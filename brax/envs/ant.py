@@ -155,7 +155,7 @@ class Ant(PipelineEnv):
         **kwargs,
     ):
         path = epath.resource_path(
-            'brax') / 'envs/assets/unproblematic_links.xml'
+            'brax') / 'envs/assets/ant.xml'
         sys = mjcf.load(path)
 
         n_frames = 5
