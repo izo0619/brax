@@ -46,7 +46,7 @@
         <site name="body" class="/"
             size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
             pos="0 0 1.6446825361251831" />
-        <body pos="0 0 1.6446825361251831" name="0/">
+        <body pos="0 0 1.4" name="0/">
             <joint name="0/rootx/" class="/" type="slide" axis="1 0 0" stiffness="0.0"
                 armature="0.0" damping="0.0" />
             <joint name="0/rootz/" class="/" type="slide" axis="0 0 1" stiffness="0.0"
