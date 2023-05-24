@@ -224,18 +224,18 @@
         </body>
     </worldbody>
     <actuator>
-        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="54"
+        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="150"
             joint="0/1/joint/" />
-        <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="64"
+        <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="150"
             joint="0/2/3/joint/" />
-        <motor name="0/2/4/motor" class="0/2/4/" ctrllimited="true" ctrlrange="-1 1" gear="65"
+        <motor name="0/2/4/motor" class="0/2/4/" ctrllimited="true" ctrlrange="-1 1" gear="150"
             joint="0/2/4/joint/" />
-        <motor name="0/2/4/5/motor" class="0/2/4/5/" ctrllimited="true" ctrlrange="-1 1" gear="50"
+        <motor name="0/2/4/5/motor" class="0/2/4/5/" ctrllimited="true" ctrlrange="-1 1" gear="150"
             joint="0/2/4/5/joint/" />
         <motor name="0/2/4/5/7/motor" class="0/2/4/5/7/" ctrllimited="true" ctrlrange="-1 1"
-            gear="87" joint="0/2/4/5/7/joint/" />
+            gear="150" joint="0/2/4/5/7/joint/" />
         <motor name="0/2/4/5/7/8/motor" class="0/2/4/5/7/8/" ctrllimited="true" ctrlrange="-1 1"
-            gear="56" joint="0/2/4/5/7/8/joint/" />
+            gear="150" joint="0/2/4/5/7/8/joint/" />
         <!-- <motor name="0/2/4/5/7/8/9/10/motor" class="0/2/4/5/7/8/9/10/" ctrllimited="true"
             ctrlrange="-1 1" gear="66" joint="0/2/4/5/7/8/9/10/joint/" /> -->
     </actuator>
