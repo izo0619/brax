@@ -64,7 +64,7 @@
                 size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
                 pos="0.17738829841916118 0 0.015156067692169723" />
             <body pos="0.17738829841916118 0 0.015156067692169723" name="0/1/">
-                <joint name="0/1/joint/" class="0/" type="hinge" axis="0 1 0" limited="true"
+                <joint name="0/1/joint/" class="0/" type="hinge" axis="0 1 0" limited="false"
                     stiffness="100.0" range="-59.967968634045079 59.967968634045079" armature="0.2"
                     damping="3.5" />
                 <geom name="0/1/geom" class="0/1/" type="capsule" contype="1" conaffinity="1"
@@ -90,7 +90,8 @@
                     size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
                     pos="0.078730536243448446 0 -0.20029490990229112" />
                 <body pos="0.078730536243448446 0 -0.20029490990229112" name="0/2/3/">
-                    <joint name="0/2/3/joint/" class="0/2/" type="hinge" axis="0 1 0" limited="true"
+                    <joint name="0/2/3/joint/" class="0/2/" type="hinge" axis="0 1 0"
+                        limited="false"
                         stiffness="100.0" range="-54.477055309290478 54.477055309290478"
                         armature="0.2" damping="3.5" />
                     <geom name="0/2/3/geom" class="0/2/3/" type="capsule" contype="1"
