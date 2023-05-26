@@ -3,7 +3,7 @@
     <option timestep="0.01" iterations="4" />
     <custom>
         <!-- brax custom params -->
-        <numeric data="1.0 1.0 1.55 1.0 0.0 0.0 0.0 0.0 1.0 0.0 -1.0 0.0 -1.0 0.0 1.0"
+        <numeric data="1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 -1.0 0.0 -1.0 0.0 1.0"
             name="init_qpos" />
         <numeric data="1000" name="constraint_limit_stiffness" />
         <numeric data="4000" name="constraint_stiffness" />
@@ -35,7 +35,7 @@
             pos="0 0 1.3" specular=".1 .1 .1" />
         <geom conaffinity="1" condim="3" material="MatPlane" name="floor" pos="0 0 0"
             size="40 40 40" type="plane" />
-        <body name="torso" pos="0 0 0.75">
+        <body name="torso" pos="0 0 2">
             <camera name="track" mode="trackcom" pos="0 -3 0.3" xyaxes="1 0 0 0 0 1" />
             <geom name="torso_geom" pos="0 0 0" size="0.25" type="sphere" />
             <joint armature="0" damping="0" limited="false" margin="0.01" name="root" pos="0 0 0"
