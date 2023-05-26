@@ -106,9 +106,9 @@
         </body>
     </worldbody>
     <actuator>
-        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="150"
+        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="54"
             joint="0/1/joint/" />
-        <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="150"
+        <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="64"
             joint="0/2/3/joint/" />
     </actuator>
     <sensor>
