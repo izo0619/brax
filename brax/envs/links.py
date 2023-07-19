@@ -8,14 +8,15 @@ from brax.io import mjcf
 class Links(PipelineEnv):
     """Trains an links to go move."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, backend='generalized', **kwargs):
         path = epath.resource_path(
             'brax') / 'envs/assets/2_links.xml'
         sys = mjcf.load(path)
-        super().__init__(sys=sys, backend="positional", **kwargs)
         self._dt = 0.02
         self._reset_count = 0
         self._step_count = 0
+
+        super().__init__(sys=sys, backend=backend, **kwargs)
 
     def reset(self, rng: jp.ndarray) -> State:
         self._reset_count += 1
