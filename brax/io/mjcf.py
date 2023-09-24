@@ -151,6 +151,8 @@ def _check_custom(mj: mujoco.MjModel, custom: Dict[str, np.ndarray]) -> None:
     print(custom['init_qpos'])
     print(custom['init_qpos'].shape)
     print(mj.nq)
+    if len(custom['init_qpos'].shape) == 0:
+        custom['init_qpos'] = jp.array([custom['init_qpos']])
     if 'init_qpos' in custom and custom['init_qpos'].shape[0] != mj.nq:
         size = custom['init_qpos'].shape[0]
         raise ValueError(
