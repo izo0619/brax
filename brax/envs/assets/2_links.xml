@@ -2,7 +2,7 @@
     <option timestep="0.01" />
     <custom>
         <!-- brax custom params -->
-        <numeric data="0.5"
+        <numeric data="0.5 0"
             name="init_qpos" />
         <numeric data="1000" name="constraint_limit_stiffness" />
         <numeric data="4000" name="constraint_stiffness" />
