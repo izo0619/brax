@@ -23,6 +23,7 @@ class Links(PipelineEnv):
         pipeline_state = base.State(
             q=jp.zeros(1),
             qd=jp.zeros(1),
+            # position transform shift of 0, no rotation
             x=base.Transform.create(pos=jp.zeros(3)),
             xd=base.Motion.create(vel=jp.zeros(3)),
             contact=None

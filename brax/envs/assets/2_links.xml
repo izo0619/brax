@@ -84,7 +84,7 @@
         <motor name="0/2/4/5/7/8/9/10/motor" class="0/2/4/5/7/8/9/10/" ctrllimited="true"
             ctrlrange="-1 1" gear="66" joint="0/2/4/5/7/8/9/10/joint/" /> -->
     </actuator>
-    <sensor>
+    <!-- <sensor>
         <subtreelinvel name="velocity" body="0/" />
-    </sensor>
+    </sensor> -->
 </mujoco>
