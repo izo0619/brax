@@ -21,8 +21,8 @@ class Links(PipelineEnv):
     def reset(self, rng: jp.ndarray) -> State:
         self._reset_count += 1
         pipeline_state = base.State(
-            q=jp.zeros(1),
-            qd=jp.zeros(1),
+            q=jp.array([1]),
+            qd=jp.array([1]),
             # position transform shift of 0, no rotation
             x=base.Transform.create(pos=jp.zeros((1, 1))),
             xd=base.Motion.create(vel=jp.zeros((1, 1))),
