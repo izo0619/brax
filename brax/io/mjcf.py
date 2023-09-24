@@ -148,9 +148,6 @@ def _check_custom(mj: mujoco.MjModel, custom: Dict[str, np.ndarray]) -> None:
         and 0 <= custom['spring_inertia_scale'] <= 1
     ):
         raise ValueError('Spring inertia and mass scale must be in [0, 1].')
-    print(custom['init_qpos'])
-    print(custom['init_qpos'].shape)
-    print(mj.nq)
     if len(custom['init_qpos'].shape) == 0:
         custom['init_qpos'] = jp.array([custom['init_qpos']])
     if 'init_qpos' in custom and custom['init_qpos'].shape[0] != mj.nq:

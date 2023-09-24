@@ -24,8 +24,8 @@ class Links(PipelineEnv):
             q=jp.array([1]),
             qd=jp.array([1]),
             # position transform shift of 0, no rotation
-            x=base.Transform.create(pos=jp.array([1, 1])),
-            xd=base.Motion.create(vel=jp.array([1, 1])),
+            x=base.Transform.create(pos=jp.array([[1, 1]])),
+            xd=base.Motion.create(vel=jp.array([[1, 1]])),
             contact=None
         )
         obs = jp.zeros(2)
