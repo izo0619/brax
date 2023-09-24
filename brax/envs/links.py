@@ -6,7 +6,7 @@ from brax.io import mjcf
 
 
 class Links(PipelineEnv):
-    """Trains an links to go move."""
+    """Trains 2 links to move."""
 
     def __init__(self, backend='generalized', **kwargs):
         path = epath.resource_path(
@@ -23,8 +23,8 @@ class Links(PipelineEnv):
         pipeline_state = base.State(
             q=jp.zeros(1),
             qd=jp.zeros(1),
-            x=base.Transform.create(pos=jp.zeros(2, 1)),
-            xd=base.Motion.create(vel=jp.zeros(2)),
+            x=base.Transform.create(pos=jp.zeros(3)),
+            xd=base.Motion.create(vel=jp.zeros(3)),
             contact=None
         )
         obs = jp.zeros(2)

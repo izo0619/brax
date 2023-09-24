@@ -38,12 +38,12 @@
             size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
             pos="0 0 1.6446825361251831" />
         <body pos="0 0 0" name="0/">
-            <joint name="0/rootx/" class="/" type="slide" axis="1 0 0" stiffness="0.0"
+            <!-- <joint name="0/rootx/" class="/" type="slide" axis="1 0 0" stiffness="0.0"
                 armature="0.0" damping="0.0" />
             <joint name="0/rootz/" class="/" type="slide" axis="0 0 1" stiffness="0.0"
                 armature="0.0" damping="0.0" />
             <joint name="0/rooty/" class="/" type="hinge" axis="0 1 0" stiffness="0.0"
-                armature="0.0" damping="0.0" />
+                armature="0.0" damping="0.0" /> -->
             <geom name="0/geom" class="0/" type="capsule" contype="1" conaffinity="1" condim="3"
                 size="0.048470334428519793"
                 rgba="0.00033081932194189978 0.012455012886624872 0.63742753509390848 1"
