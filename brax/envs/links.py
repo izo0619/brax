@@ -34,7 +34,8 @@ class Links(PipelineEnv):
 
     def step(self, state: State, action: jp.ndarray) -> State:
         self._step_count += 1
-        vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
+        # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
+        vel = state.pipeline_state.xd.vel + self._dt
         pos = state.pipeline_state.x.pos + vel * self._dt
 
         qp = state.pipeline_state.replace(
