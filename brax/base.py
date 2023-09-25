@@ -58,6 +58,8 @@ class Base:
         return tree_map(lambda x: x[beg:end], self)
 
     def take(self, i, axis=0) -> Any:
+        print(self)
+        print(i)
         return tree_map(lambda x: jp.take(x, i, axis=axis, mode='wrap'), self)
 
     def concatenate(self, *others: Any, axis: int = 0) -> Any:
