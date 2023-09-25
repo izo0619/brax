@@ -20,7 +20,7 @@ class Links(PipelineEnv):
 
     def reset(self, rng: jp.ndarray) -> State:
         self._reset_count += 1
-        pipeline_state = self.pipeline_init(q=jp.zeros(1), qd=jp.zeros(1))
+        pipeline_state = self.pipeline_init(q=jp.array([1]), qd=jp.zeros(1))
         obs = self._get_obs(pipeline_state)
         reward, done = jp.array(0.0), jp.array(0.0)
         return State(pipeline_state, obs, reward, done)
@@ -32,7 +32,6 @@ class Links(PipelineEnv):
         pos = state.pipeline_state.x.pos + vel * self._dt
         qd = state.pipeline_state.qd + self._dt
         q = state.pipeline_state.q + qd * self._dt
-        print(q.tolist(), qd.tolist(), pos.tolist(), vel.tolist())
         qp = state.pipeline_state.replace(
             q=q,
             qd=qd
