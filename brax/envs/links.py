@@ -27,11 +27,8 @@ class Links(PipelineEnv):
 
     def step(self, state: State, action: jp.ndarray) -> State:
         self._step_count += 1
-        pipeline_state0 = state.pipeline_state
-        pipeline_state = self.pipeline_step(
-            pipeline_state0, action)
-        print(pipeline_state0)
-        print(pipeline_state)
+        pipeline_state = state.pipeline_state
+
         # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
         vel = pipeline_state.xd.vel + self._dt
         pos = pipeline_state.x.pos + vel * self._dt
@@ -45,6 +42,8 @@ class Links(PipelineEnv):
         )
         obs = jp.array([pos[0], vel[0]])
         reward = pos[0]
+
+        pipeline_state = self.pipeline_step(pipeline_state, action)
 
         return state.replace(pipeline_state=pipeline_state, obs=obs, reward=reward)
 
