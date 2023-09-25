@@ -27,12 +27,14 @@ class Links(PipelineEnv):
 
     def step(self, state: State, action: jp.ndarray) -> State:
         self._step_count += 1
+        pipeline_state0 = state.pipeline_state
+        pipeline_state = self.pipeline_step(pipeline_state0, action)
         # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
-        vel = state.pipeline_state.xd.vel + self._dt
-        pos = state.pipeline_state.x.pos + vel * self._dt
-        qd = state.pipeline_state.qd + self._dt
-        q = state.pipeline_state.q + qd * self._dt
-        qp = state.pipeline_state.replace(
+        vel = pipeline_state.xd.vel + self._dt
+        pos = pipeline_state.x.pos + vel * self._dt
+        qd = pipeline_state.qd + self._dt
+        q = pipeline_state.q + qd * self._dt
+        pipeline_state = pipeline_state.replace(
             q=q,
             qd=qd
             # x=state.pipeline_state.x.replace(pos=pos),
@@ -41,7 +43,7 @@ class Links(PipelineEnv):
         obs = jp.array([pos[0], vel[0]])
         reward = pos[0]
 
-        return state.replace(pipeline_state=qp, obs=obs, reward=reward)
+        return state.replace(pipeline_state=pipeline_state, obs=obs, reward=reward)
 
     def _get_obs(self, pipeline_state: base.State) -> jp.ndarray:
         """Observe body position and velocities."""
