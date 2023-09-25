@@ -28,14 +28,16 @@ class Links(PipelineEnv):
         #     xd=base.Motion.create(vel=jp.array([[1, 1]])),
         #     contact=None
         # )
-        pipeline_state = base.State(
-            q=jp.zeros(1),
-            qd=jp.zeros(1),
-            x=base.Transform.create(pos=jp.zeros(3)),
-            xd=base.Motion.create(vel=jp.zeros(3)),
-            contact=None
-        )
-        obs = jp.zeros(2)
+        # pipeline_state = base.State(
+        #     q=jp.zeros(1),
+        #     qd=jp.zeros(1),
+        #     x=base.Transform.create(pos=jp.zeros(3)),
+        #     xd=base.Motion.create(vel=jp.zeros(3)),
+        #     contact=None
+        # )
+        pipeline_state = self.pipeline_init(q=jp.zeros(1), qd=jp.zeros(1))
+        obs = self._get_obs(pipeline_state)
+        # obs = jp.zeros(2)
         reward, done = jp.array(0.0), jp.array(0.0)
         return State(pipeline_state, obs, reward, done)
 
