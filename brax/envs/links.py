@@ -61,8 +61,8 @@ class Links(PipelineEnv):
         qpos = pipeline_state.q
         qvel = pipeline_state.qd
 
-        if self._exclude_current_positions_from_observation:
-            qpos = pipeline_state.q[2:]
+        # if self._exclude_current_positions_from_observation:
+        #     qpos = pipeline_state.q[2:]
 
         return jp.concatenate([qpos] + [qvel])
 
