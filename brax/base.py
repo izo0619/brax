@@ -146,8 +146,6 @@ class Transform(Base):
         elif rot is None and pos is not None:
             rot = jp.tile(jp.array([1.0, 0.0, 0.0, 0.0]),
                           pos.shape[:-1] + (1,))
-        print(pos)
-        print(rot)
         return Transform(pos=pos, rot=rot)
 
     @classmethod
