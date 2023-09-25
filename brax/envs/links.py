@@ -12,7 +12,7 @@ class Links(PipelineEnv):
         path = epath.resource_path(
             'brax') / 'envs/assets/2_links.xml'
         sys = mjcf.load(path)
-        self._dt = 0.2
+        self._dt = 0.02
         self._reset_count = 0
         self._step_count = 0
 
@@ -20,24 +20,8 @@ class Links(PipelineEnv):
 
     def reset(self, rng: jp.ndarray) -> State:
         self._reset_count += 1
-        # pipeline_state = base.State(
-        #     q=jp.array([1]),
-        #     qd=jp.array([1]),
-        #     # position transform shift of 0, no rotation
-        #     x=base.Transform.create(pos=jp.array([[1, 1]])),
-        #     xd=base.Motion.create(vel=jp.array([[1, 1]])),
-        #     contact=None
-        # )
-        # pipeline_state = base.State(
-        #     q=jp.zeros(1),
-        #     qd=jp.zeros(1),
-        #     x=base.Transform.create(pos=jp.zeros(3)),
-        #     xd=base.Motion.create(vel=jp.zeros(3)),
-        #     contact=None
-        # )
         pipeline_state = self.pipeline_init(q=jp.zeros(1), qd=jp.zeros(1))
         obs = self._get_obs(pipeline_state)
-        # obs = jp.zeros(2)
         reward, done = jp.array(0.0), jp.array(0.0)
         return State(pipeline_state, obs, reward, done)
 
@@ -46,10 +30,13 @@ class Links(PipelineEnv):
         # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
         vel = state.pipeline_state.xd.vel + self._dt
         pos = state.pipeline_state.x.pos + vel * self._dt
-
+        qd = state.pipeline_state.qd + self._dt
+        q = state.pipeline_state.q + qd * self._dt
         qp = state.pipeline_state.replace(
-            x=state.pipeline_state.x.replace(pos=pos),
-            xd=state.pipeline_state.xd.replace(vel=vel),
+            q=q,
+            q=qd
+            # x=state.pipeline_state.x.replace(pos=pos),
+            # xd=state.pipeline_state.xd.replace(vel=vel),
         )
         obs = jp.array([pos[0], vel[0]])
         reward = pos[0]
@@ -60,10 +47,6 @@ class Links(PipelineEnv):
         """Observe body position and velocities."""
         qpos = pipeline_state.q
         qvel = pipeline_state.qd
-
-        # if self._exclude_current_positions_from_observation:
-        #     qpos = pipeline_state.q[2:]
-
         return jp.concatenate([qpos] + [qvel])
 
     @property

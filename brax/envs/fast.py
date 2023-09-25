@@ -45,6 +45,7 @@ class Fast(PipelineEnv):
     self._step_count += 1
     vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
     pos = state.pipeline_state.x.pos + vel * self._dt
+    
 
     qp = state.pipeline_state.replace(
         x=state.pipeline_state.x.replace(pos=pos),
