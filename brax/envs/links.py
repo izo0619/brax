@@ -12,7 +12,7 @@ class Links(PipelineEnv):
         path = epath.resource_path(
             'brax') / 'envs/assets/2_links.xml'
         sys = mjcf.load(path)
-        self._dt = 0.02
+        self._dt = 0.2
         self._reset_count = 0
         self._step_count = 0
 
@@ -20,12 +20,19 @@ class Links(PipelineEnv):
 
     def reset(self, rng: jp.ndarray) -> State:
         self._reset_count += 1
+        # pipeline_state = base.State(
+        #     q=jp.array([1]),
+        #     qd=jp.array([1]),
+        #     # position transform shift of 0, no rotation
+        #     x=base.Transform.create(pos=jp.array([[1, 1]])),
+        #     xd=base.Motion.create(vel=jp.array([[1, 1]])),
+        #     contact=None
+        # )
         pipeline_state = base.State(
-            q=jp.array([1]),
-            qd=jp.array([1]),
-            # position transform shift of 0, no rotation
-            x=base.Transform.create(pos=jp.array([[1, 1]])),
-            xd=base.Motion.create(vel=jp.array([[1, 1]])),
+            q=jp.zeros(1),
+            qd=jp.zeros(1),
+            x=base.Transform.create(pos=jp.zeros(3)),
+            xd=base.Motion.create(vel=jp.zeros(3)),
             contact=None
         )
         obs = jp.zeros(2)
