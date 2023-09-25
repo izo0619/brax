@@ -34,7 +34,7 @@ class Links(PipelineEnv):
         q = state.pipeline_state.q + qd * self._dt
         qp = state.pipeline_state.replace(
             q=q,
-            q=qd
+            qd=qd
             # x=state.pipeline_state.x.replace(pos=pos),
             # xd=state.pipeline_state.xd.replace(vel=vel),
         )
