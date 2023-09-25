@@ -56,6 +56,16 @@ class Links(PipelineEnv):
 
         return state.replace(pipeline_state=qp, obs=obs, reward=reward)
 
+    def _get_obs(self, pipeline_state: base.State) -> jp.ndarray:
+        """Observe body position and velocities."""
+        qpos = pipeline_state.q
+        qvel = pipeline_state.qd
+
+        if self._exclude_current_positions_from_observation:
+            qpos = pipeline_state.q[2:]
+
+        return jp.concatenate([qpos] + [qvel])
+
     @property
     def reset_count(self):
         return self._reset_count
