@@ -15,61 +15,61 @@
         <numeric data="15" name="solver_maxls" />
     </custom>
     <default>
-        <default class="/" />
         <default class="0/" />
-        <default class="0/1/" />
+        <default class="1/" />
+        <default class="1/2/" />
     </default>
     <asset>
         <texture name="texplane" type="2d" builtin="checker"
             rgb1="0.10000000000000001 0.20000000000000001 0.29999999999999999"
             rgb2="0.20000000000000001 0.29999999999999999 0.40000000000000002" width="300"
             height="300" />
-        <material name="MatPlane" class="/" texture="texplane" texrepeat="20 20" specular="1.0"
+        <material name="MatPlane" class="0/" texture="texplane" texrepeat="20 20" specular="1.0"
             shininess="1.0" reflectance="0.5" />
     </asset>
     <worldbody>
-        <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3"
+        <light name="//unnamed_light_0" class="0/" directional="true" pos="0 0 1.5" dir="0 0 -1.3"
             cutoff="100.0" exponent="1.0" diffuse="1 1 1"
             specular="0.10000000000000001 0.10000000000000001 0.10000000000000001" />
-        <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane"
+        <geom name="ground" class="0/" type="plane" size="15 15 0.5" material="MatPlane"
             rgba="1 1 1 1" />
-        <site name="body" class="/"
+        <site name="body" class="0/"
             size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
             pos="0 0 1.6446825361251831" />
-        <body pos="0 0 0" name="0/">
+        <body pos="0 0 0" name="1/">
             <!-- <joint name="0/rootx/" class="/" type="slide" axis="1 0 0" stiffness="0.0"
                 armature="0.0" damping="0.0" />
             <joint name="0/rootz/" class="/" type="slide" axis="0 0 1" stiffness="0.0"
                 armature="0.0" damping="0.0" />
             <joint name="0/rooty/" class="/" type="hinge" axis="0 1 0" stiffness="0.0"
                 armature="0.0" damping="0.0" /> -->
-            <geom name="0/geom" class="0/" type="capsule" contype="1" conaffinity="1" condim="3"
+            <geom name="1/geom" class="1/" type="capsule" contype="1" conaffinity="1" condim="3"
                 size="0.048470334428519793"
                 rgba="0.00033081932194189978 0.012455012886624872 0.63742753509390848 1"
                 friction="0.59999999999999998 0.10000000000000001 0.10000000000000001"
                 fromto="0 0 0 0.43986990955996008 0 0.037582513527956607" />
-            <site name="0/end0" class="0/" size="0.0050000000000000001"
+            <site name="1/end0" class="1/" size="0.0050000000000000001"
                 pos="0.43986990955996008 0 0.037582513527956607" />
-            <site name="0/attach1" class="0/"
+            <site name="1/attach1" class="1/"
                 size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
                 pos="0.17738829841916118 0 0.015156067692169723" />
-            <body pos="0 0 0.015156067692169723" name="0/1/">
-                <joint name="0/1/joint/" class="0/" type="hinge" axis="0 1 0" limited="true"
+            <body pos="0 0 0.015156067692169723" name="1/2/">
+                <joint name="1/2/joint/" class="1/" type="hinge" axis="0 1 0" limited="true"
                     stiffness="100.0" range="-59.967968634045079 59.967968634045079" armature="0.2"
                     damping="3.5" />
-                <geom name="0/1/geom" class="0/1/" type="capsule" contype="1" conaffinity="1"
+                <geom name="1/2/geom" class="1/2/" type="capsule" contype="1" conaffinity="1"
                     condim="3" size="0.06845958618526804"
                     rgba="0.87108043698540449 0.28535127249538017 0.63559308946676174 1"
                     friction="0.59999999999999998 0.10000000000000001 0.10000000000000001"
                     fromto="0 0 0 0.078363312647046768 0 0.48536182802937633" />
-                <site name="0/1/end1" class="0/1/" size="0.0050000000000000001"
+                <site name="1/2/end1" class="1/2/" size="0.0050000000000000001"
                     pos="0.078363312647046768 0 0.48536182802937633" />
             </body>
         </body>
     </worldbody>
     <actuator>
-        <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="150"
-            joint="0/1/joint/" />
+        <motor name="1/2/motor" class="1/2/" ctrllimited="true" ctrlrange="-1 1" gear="150"
+            joint="1/2/joint/" />
         <!-- <motor name="0/2/3/motor" class="0/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="64"
             joint="0/2/3/joint/" />
         <motor name="0/2/4/motor" class="0/2/4/" ctrllimited="true" ctrlrange="-1 1" gear="65"
