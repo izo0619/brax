@@ -26,42 +26,42 @@ class Links(PipelineEnv):
         return State(pipeline_state, obs, reward, done)
 
     def step(self, state: State, action: jp.ndarray) -> State:
-        # self._step_count += 1
-        # pipeline_state = state.pipeline_state
+        self._step_count += 1
+        pipeline_state = state.pipeline_state
 
-        # # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
-        # vel = pipeline_state.xd.vel + self._dt
-        # pos = pipeline_state.x.pos + vel * self._dt
-        # qd = pipeline_state.qd + self._dt
-        # q = pipeline_state.q + qd * self._dt
-        # pipeline_state = pipeline_state.replace(
-        #     q=q,
-        #     qd=qd
-        #     # x=state.pipeline_state.x.replace(pos=pos),
-        #     # xd=state.pipeline_state.xd.replace(vel=vel),
-        # )
-        # obs = jp.array([pos[0], vel[0]])
-        # reward = pos[0]
-
-        # pipeline_state = self.pipeline_step(pipeline_state, action)
-
-        # return state.replace(pipeline_state=pipeline_state, obs=obs, reward=reward)
-
-        pipeline_state0 = state.pipeline_state
-        pipeline_state = self.pipeline_step(pipeline_state0, action)
-
-        velocity = (pipeline_state.x.pos[0] -
-                    pipeline_state0.x.pos[0]) / self.dt
-
-        obs = self._get_obs(pipeline_state)
-        state.metrics.update(
-            x_position=pipeline_state.x.pos[0, 0],
-            y_position=pipeline_state.x.pos[0, 1],
-            x_velocity=velocity[0],
-            y_velocity=velocity[1],
+        # vel = state.pipeline_state.xd.vel + (action > 0) * self._dt
+        vel = pipeline_state.xd.vel + self._dt
+        pos = pipeline_state.x.pos + vel * self._dt
+        qd = pipeline_state.qd + self._dt
+        q = pipeline_state.q + qd * self._dt
+        pipeline_state = pipeline_state.replace(
+            q=q,
+            qd=qd
+            x=state.pipeline_state.x.replace(pos=pos),
+            xd=state.pipeline_state.xd.replace(vel=vel),
         )
-        return state.replace(
-            pipeline_state=pipeline_state, obs=obs)
+        obs = jp.array([pos[0], vel[0]])
+        reward = pos[0]
+
+        pipeline_state = self.pipeline_step(pipeline_state, action)
+
+        return state.replace(pipeline_state=pipeline_state, obs=obs, reward=reward)
+
+        # pipeline_state0 = state.pipeline_state
+        # pipeline_state = self.pipeline_step(pipeline_state0, action)
+
+        # velocity = (pipeline_state.x.pos[0] -
+        #             pipeline_state0.x.pos[0]) / self.dt
+
+        # obs = self._get_obs(pipeline_state)
+        # state.metrics.update(
+        #     x_position=pipeline_state.x.pos[0, 0],
+        #     y_position=pipeline_state.x.pos[0, 1],
+        #     x_velocity=velocity[0],
+        #     y_velocity=velocity[1],
+        # )
+        # return state.replace(
+        #     pipeline_state=pipeline_state, obs=obs)
 
     def _get_obs(self, pipeline_state: base.State) -> jp.ndarray:
         """Observe body position and velocities."""
