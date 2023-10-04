@@ -12,7 +12,7 @@ class Links(PipelineEnv):
         path = epath.resource_path(
             'brax') / 'envs/assets/2_links.xml'
         sys = mjcf.load(path)
-        self._dt = 0.1
+        self._dt = 0.5
         self._reset_count = 0
         self._step_count = 0
 
