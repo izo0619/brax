@@ -42,7 +42,7 @@ class Links(PipelineEnv):
         backend: str, the physics backend to use
         **kwargs: Arguments that are passed to the base class.
         """
-        path = epath.resource_path('brax') / 'envs/assets/random_morph/4_links.xml'
+        path = epath.resource_path('brax') / 'envs/assets/random_morph/random_morph_2.xml'
         sys = mjcf.load(path)
 
         n_frames = 4
