@@ -12,21 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# pylint:disable=g-multiple-import, g-importing-member
 """Base brax primitives and simple manipulations of them."""
+
+import copy
 import functools
-from typing import Any, List, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Type, Union
 
 from brax import math
 from flax import struct
+import jax
 from jax import numpy as jp
 from jax import vmap
 from jax.tree_util import tree_map
+
 
 # f: free, 1: 1-dof, 2: 2-dof, 3: 3-dof
 Q_WIDTHS = {'f': 7, '1': 1, '2': 2, '3': 3}
 QD_WIDTHS = {'f': 6, '1': 1, '2': 2, '3': 3}
 
 
+@struct.dataclass
 class Base:
   """Base functionality extending all brax types.
 
@@ -51,7 +57,7 @@ class Base:
   def reshape(self, shape: Sequence[int]) -> Any:
     return tree_map(lambda x: x.reshape(shape), self)
 
-  def select(self, o: Any, cond: jp.ndarray) -> Any:
+  def select(self, o: Any, cond: jax.Array) -> Any:
     return tree_map(lambda x, y: (x.T * cond + y.T * (1 - cond)).T, self, o)
 
   def slice(self, beg: int, end: int) -> Any:
@@ -64,12 +70,12 @@ class Base:
     return tree_map(lambda *x: jp.concatenate(x, axis=axis), self, *others)
 
   def index_set(
-      self, idx: Union[jp.ndarray, Sequence[jp.ndarray]], o: Any
+      self, idx: Union[jax.Array, Sequence[jax.Array]], o: Any
   ) -> Any:
     return tree_map(lambda x, y: x.at[idx].set(y), self, o)
 
   def index_sum(
-      self, idx: Union[jp.ndarray, Sequence[jp.ndarray]], o: Any
+      self, idx: Union[jax.Array, Sequence[jax.Array]], o: Any
   ) -> Any:
     return tree_map(lambda x, y: x.at[idx].add(y), self, o)
 
@@ -103,9 +109,60 @@ class Base:
 
     return VmapField(in_axes, out_axes)
 
+  def tree_replace(
+      self, params: Dict[str, Optional[jax.typing.ArrayLike]]
+  ) -> 'Base':
+    """Creates a new object with parameters set.
+
+    Args:
+      params: a dictionary of key value pairs to replace
+
+    Returns:
+      data clas with new values
+
+    Example:
+      If a system has 3 links, the following code replaces the mass
+      of each link in the System:
+      >>> sys = sys.tree_replace(
+      >>>     {'link.inertia.mass', jp.array([1.0, 1.2, 1.3])})
+    """
+    new = self
+    for k, v in params.items():
+      new = _tree_replace(new, k.split('.'), v)
+    return new
+
   @property
   def T(self):  # pylint:disable=invalid-name
     return tree_map(lambda x: x.T, self)
+
+
+def _tree_replace(
+    base: Base,
+    attr: Sequence[str],
+    val: Optional[jax.typing.ArrayLike],
+) -> Base:
+  """Sets attributes in a struct.dataclass with values."""
+  if not attr:
+    return base
+
+  # special case for List attribute
+  if len(attr) > 1 and isinstance(getattr(base, attr[0]), list):
+    lst = copy.deepcopy(getattr(base, attr[0]))
+
+    for i, g in enumerate(lst):
+      if not hasattr(g, attr[1]):
+        continue
+      v = val if not hasattr(val, '__iter__') else val[i]
+      lst[i] = _tree_replace(g, attr[1:], v)
+
+    return base.replace(**{attr[0]: lst})
+
+  if len(attr) == 1:
+    return base.replace(**{attr[0]: val})
+
+  return base.replace(
+      **{attr[0]: _tree_replace(getattr(base, attr[0]), attr[1:], val)}
+  )
 
 
 @struct.dataclass
@@ -117,8 +174,8 @@ class Transform(Base):
     rot: (4,) quaternion rotation the coordinate frame
   """
 
-  pos: jp.ndarray
-  rot: jp.ndarray
+  pos: jax.Array
+  rot: jax.Array
 
   def do(self, o):
     """Apply the transform."""
@@ -136,7 +193,7 @@ class Transform(Base):
 
   @classmethod
   def create(
-      cls, pos: Optional[jp.ndarray] = None, rot: Optional[jp.ndarray] = None
+      cls, pos: Optional[jax.Array] = None, rot: Optional[jax.Array] = None
   ) -> 'Transform':
     """Creates a transform with either pos, rot, or both."""
     if pos is None and rot is None:
@@ -166,21 +223,21 @@ class Motion(Base):
     vel: (3,) linear velocity in the direction of the normal
   """
 
-  ang: jp.ndarray
-  vel: jp.ndarray
+  ang: jax.Array
+  vel: jax.Array
 
   def cross(self, other):
     return _motion_cross(other, self)
 
-  def dot(self, m: Union['Motion', 'Force']) -> jp.ndarray:
+  def dot(self, m: Union['Motion', 'Force']) -> jax.Array:
     return jp.dot(self.vel, m.vel) + jp.dot(self.ang, m.ang)
 
-  def matrix(self) -> jp.ndarray:
+  def matrix(self) -> jax.Array:
     return jp.concatenate([self.ang, self.vel], axis=-1)
 
   @classmethod
   def create(
-      cls, ang: Optional[jp.ndarray] = None, vel: Optional[jp.ndarray] = None
+      cls, ang: Optional[jax.Array] = None, vel: Optional[jax.Array] = None
   ) -> 'Motion':
     if ang is None and vel is None:
       raise ValueError('must specify either ang or vel')
@@ -205,12 +262,12 @@ class Force(Base):
     vel: (3,) linear velocity in the direction of the normal
   """
 
-  ang: jp.ndarray
-  vel: jp.ndarray
+  ang: jax.Array
+  vel: jax.Array
 
   @classmethod
   def create(
-      cls, ang: Optional[jp.ndarray] = None, vel: Optional[jp.ndarray] = None
+      cls, ang: Optional[jax.Array] = None, vel: Optional[jax.Array] = None
   ) -> 'Force':
     if ang is None and vel is None:
       raise ValueError('must specify either ang or vel')
@@ -232,8 +289,8 @@ class Inertia(Base):
   """
 
   transform: Transform
-  i: jp.ndarray
-  mass: jp.ndarray
+  i: jax.Array
+  mass: jax.Array
 
   def mul(self, m: Motion) -> 'Force':
     """Multiplies inertia with motion yielding a force."""
@@ -264,13 +321,13 @@ class Link(Base):
   transform: Transform
   joint: Transform
   inertia: Inertia
-  invweight: jp.ndarray
+  invweight: jax.Array
   # only used by `brax.physics.spring`:
-  constraint_stiffness: jp.ndarray
-  constraint_vel_damping: jp.ndarray
-  constraint_limit_stiffness: jp.ndarray
-  # only used by `brax.physics.spring` and `brax.physics.pbd`:
-  constraint_ang_damping: jp.ndarray
+  constraint_stiffness: jax.Array
+  constraint_vel_damping: jax.Array
+  constraint_limit_stiffness: jax.Array
+  # only used by `brax.physics.spring` and `brax.physics.positional`:
+  constraint_ang_damping: jax.Array
 
 
 @struct.dataclass
@@ -284,15 +341,17 @@ class DoF(Base):
     damping: restorative force back to zero velocity
     limit: tuple of min, max angle limits
     invweight: diagonal inverse inertia at init_qpos
+    solver_params: (7,) limit constraint solver parameters
   """
 
   motion: Motion
-  armature: jp.ndarray
-  stiffness: jp.ndarray
-  damping: jp.ndarray
-  limit: Tuple[jp.ndarray, jp.ndarray]
+  armature: jax.Array
+  stiffness: jax.Array
+  damping: jax.Array
+  limit: Tuple[jax.Array, jax.Array]
   # only used by `brax.physics.generalized`:
-  invweight: jp.ndarray
+  invweight: jax.Array
+  solver_params: jax.Array
 
 
 @struct.dataclass
@@ -305,12 +364,14 @@ class Geometry(Base):
       relative to the world frame in the case of unparented geometry
     friction: resistance encountered when sliding against another geometry
     elasticity: bounce/restitution encountered when hitting another geometry
+    solver_params: (7,) solver parameters (reference, impedance)
   """
 
-  link_idx: Optional[jp.ndarray]
+  link_idx: Optional[jax.Array]
   transform: Transform
-  friction: jp.ndarray
-  elasticity: jp.ndarray
+  friction: jax.Array
+  elasticity: jax.Array
+  solver_params: jax.Array
 
 
 @struct.dataclass
@@ -322,8 +383,8 @@ class Sphere(Geometry):
     rgba: (4,) the rgba to display in the renderer
   """
 
-  radius: jp.ndarray
-  rgba: Optional[jp.ndarray] = None
+  radius: jax.Array
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -336,9 +397,9 @@ class Capsule(Geometry):
     rgba: (4,) the rgba to display in the renderer
   """
 
-  radius: jp.ndarray
-  length: jp.ndarray
-  rgba: Optional[jp.ndarray] = None
+  radius: jax.Array
+  length: jax.Array
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -350,8 +411,23 @@ class Box(Geometry):
     rgba: (4,) the rgba to display in the renderer
   """
 
-  halfsize: jp.ndarray
-  rgba: Optional[jp.ndarray] = None
+  halfsize: jax.Array
+  rgba: Optional[jax.Array] = None
+
+
+@struct.dataclass
+class Cylinder(Geometry):
+  """A cylinder.
+
+  Attributes:
+    radius: (1,) radius of the top and bottom of the cylinder
+    length: (1,) length of the cylinder
+    rgba: (4,) the rgba to display in the renderer
+  """
+
+  radius: jax.Array
+  length: jax.Array
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -362,7 +438,7 @@ class Plane(Geometry):
     rgba: (4,) the rgba to display in the renderer, currently unused
   """
 
-  rgba: Optional[jp.ndarray] = None
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -377,9 +453,9 @@ class Mesh(Geometry):
     rgba: (4,) the rgba to display in the renderer, currently unused
   """
 
-  vert: jp.ndarray
-  face: jp.ndarray
-  rgba: Optional[jp.ndarray] = None
+  vert: jax.Array
+  face: jax.Array
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -393,10 +469,10 @@ class Convex(Geometry):
     rgba: (4,) the rgba to display in the renderer, currently unused
   """
 
-  vert: jp.ndarray
-  face: jp.ndarray
-  unique_edge: jp.ndarray
-  rgba: Optional[jp.ndarray] = None
+  vert: jax.Array
+  face: jax.Array
+  unique_edge: jax.Array
+  rgba: Optional[jax.Array] = None
 
 
 @struct.dataclass
@@ -410,18 +486,20 @@ class Contact(Base):
       two geometries are interpenetrating, negative means they are not
     friction: resistance encountered when sliding against another geometry
     elasticity: bounce/restitution encountered when hitting another geometry
+    solver_params: (7,) collision constraint solver parameters
     link_idx: Tuple of link indices participating in contact.  The second part
       of the tuple can be None if the second geometry is static.
   """
 
-  pos: jp.ndarray
-  normal: jp.ndarray
-  penetration: jp.ndarray
-  friction: jp.ndarray
-  # only used by `brax.physics.spring` and `brax.physics.pbd`:
-  elasticity: jp.ndarray
+  pos: jax.Array
+  normal: jax.Array
+  penetration: jax.Array
+  friction: jax.Array
+  # only used by `brax.physics.spring` and `brax.physics.positional`:
+  elasticity: jax.Array
+  solver_params: jax.Array
 
-  link_idx: Tuple[jp.ndarray, Optional[jp.ndarray]]
+  link_idx: Tuple[jax.Array, Optional[jax.Array]]
 
 
 @struct.dataclass
@@ -429,13 +507,24 @@ class Actuator(Base):
   """Actuator, transforms an input signal into a force (motor or thruster).
 
   Attributes:
-    ctrl_range: (num_actuators, 2) control range for each actuator
-    gear: (num_actuators,) a list of floats used as a scaling factor for each
-      actuator torque output
+    q_id: (num_actuators,) q index associated with an actuator
+    qd_id: (num_actuators,) qd index associated with an actuator
+    ctrl_range: (num_actuators, 2) actuator control range
+    force_range: (num_actuators, 2) actuator force range
+    gain: (num_actuators,) scaling factor for each actuator control input
+    gear: (num_actuators,) scaling factor for each actuator force output
+    bias_q: (num_actuators,) bias applied by q (e.g. position actuators)
+    bias_qd: (num_actuators,) bias applied by qd (e.g. velocity actuators)
   """
 
-  ctrl_range: jp.ndarray
-  gear: jp.ndarray
+  q_id: jax.Array
+  qd_id: jax.Array
+  ctrl_range: jax.Array
+  force_range: jax.Array
+  gain: jax.Array
+  gear: jax.Array
+  bias_q: jax.Array
+  bias_qd: jax.Array
 
 
 @struct.dataclass
@@ -450,27 +539,27 @@ class State:
     contact: calculated contacts
   """
 
-  q: jp.ndarray
-  qd: jp.ndarray
+  q: jax.Array
+  qd: jax.Array
   x: Transform
   xd: Motion
   contact: Optional[Contact]
 
 
 @struct.dataclass
-class System:
+class System(Base):
   r"""Describes a physical environment: its links, joints and geometries.
 
   Attributes:
     dt: timestep used for the simulation
     gravity: (3,) linear universal force applied during forward dynamics
+    viscosity: (1,) viscosity of the medium applied to all links
+    density: (1,) density of the medium applied to all links
     link: (num_link,) the links in the system
     dof: (qd_size,) every degree of freedom for the system
     geoms: list of batched geoms grouped by type
     actuator: actuators that can be applied to links
     init_q: (q_size,) initial q position for the system
-    solver_params_joint: (7,) joint limit constraint solver parameters
-    solver_params_contact: (7,) collision constraint solver parameters
     vel_damping: (1,) linear vel damping applied to each body.
     ang_damping: (1,) angular vel damping applied to each body.
     baumgarte_erp: how aggressively interpenetrating bodies should push away\
@@ -480,6 +569,8 @@ class System:
     joint_scale_ang: scale for position-based joint rotation update
     joint_scale_pos: scale for position-based joint position update
     collide_scale: fraction of position based collide update to apply
+    enable_fluid: (1,) enables or disables fluid forces based on the
+      default viscosity and density parameters provided in the XML
     geom_masks: 64-bit mask determines whether two geoms will be contact tested.
                 lower 32 bits are type, upper 32 bits are affinity.  two geoms
                 a, b will be contact tested if a.type & b.affinity != 0
@@ -492,46 +583,36 @@ class System:
                 * '3': spherical, 3 dof, like a ball joint
     link_parents: (num_link,) int list specifying the index of each link's
                   parent link, or -1 if the link has no parent
-    actuator_types: (num_actuators,) string specifying the actuator types:
-                * 't': torque
-                * 'p': position
-    actuator_link_id: (num_actuators,) the link id associated with each actuator
-    actuator_qid: (num_actuators,) the q index associated with each actuator
-    actuator_qdid: (num_actuators,) the qd index associated with each actuator
     matrix_inv_iterations: maximum number of iterations of the matrix inverse
     solver_iterations: maximum number of iterations of the constraint solver
     solver_maxls: maximum number of line searches of the constraint solver
   """
 
-  dt: jp.ndarray
-  gravity: jp.ndarray
+  dt: jax.Array
+  gravity: jax.Array
+  viscosity: Union[float, jax.Array]
+  density: Union[float, jax.Array]
   link: Link
   dof: DoF
   geoms: List[Geometry]
   actuator: Actuator
-  init_q: jp.ndarray
-  # only used in `brax.physics.generalized`
-  solver_params_joint: jp.ndarray
-  solver_params_contact: jp.ndarray
-  # only used in `brax.physics.spring` and `brax.physics.pbd`:
-  vel_damping: jp.float32
-  ang_damping: jp.float32
-  baumgarte_erp: jp.float32
-  spring_mass_scale: jp.float32
-  spring_inertia_scale: jp.float32
-  # only used in `brax.physics.positional`
-  joint_scale_ang: jp.float32
-  joint_scale_pos: jp.float32
-  collide_scale: jp.float32
-
+  init_q: jax.Array
+  # only used in `brax.physics.spring` and `brax.physics.positional`:
+  vel_damping: Union[float, jax.Array]
+  ang_damping: Union[float, jax.Array]
+  baumgarte_erp: Union[float, jax.Array]
+  spring_mass_scale: Union[float, jax.Array]
+  spring_inertia_scale: Union[float, jax.Array]
+  # only used in `brax.physics.positional`:
+  joint_scale_ang: Union[float, jax.Array]
+  joint_scale_pos: Union[float, jax.Array]
+  collide_scale: Union[float, jax.Array]
+  # non-pytree nodes
+  enable_fluid: bool = struct.field(pytree_node=False)
   geom_masks: List[int] = struct.field(pytree_node=False)
   link_names: List[str] = struct.field(pytree_node=False)
   link_types: str = struct.field(pytree_node=False)
   link_parents: Tuple[int, ...] = struct.field(pytree_node=False)
-  actuator_types: str = struct.field(pytree_node=False)
-  actuator_link_id: List[int] = struct.field(pytree_node=False)
-  actuator_qid: List[int] = struct.field(pytree_node=False)
-  actuator_qdid: List[int] = struct.field(pytree_node=False)
   # only used in `brax.physics.generalized`:
   matrix_inv_iterations: int = struct.field(pytree_node=False)
   solver_iterations: int = struct.field(pytree_node=False)
@@ -541,7 +622,7 @@ class System:
     """Returns the number of links in the system."""
     return len(self.link_types)
 
-  def dof_link(self, depth=False) -> jp.ndarray:
+  def dof_link(self, depth=False) -> jax.Array:
     """Returns the link index corresponding to each system dof."""
     link_idxs = []
     for i, link_type in enumerate(self.link_types):
@@ -567,7 +648,7 @@ class System:
       beg += QD_WIDTHS[t]
     return ranges
 
-  def q_idx(self, link_type: str) -> jp.ndarray:
+  def q_idx(self, link_type: str) -> jax.Array:
     """Returns the q indices corresponding to a link type."""
     idx, idxs = 0, []
     for typ in self.link_types:
@@ -576,7 +657,7 @@ class System:
       idx += Q_WIDTHS[typ]
     return jp.array(idxs)
 
-  def qd_idx(self, link_type: str) -> jp.ndarray:
+  def qd_idx(self, link_type: str) -> jax.Array:
     """Returns the qd indices corresponding to a link type."""
     idx, idxs = 0, []
     for typ in self.link_types:
@@ -595,7 +676,7 @@ class System:
 
   def act_size(self) -> int:
     """Returns the act dimension for the system."""
-    return sum({'m': 1, 'p': 1}[act_typ] for act_typ in self.actuator_types)
+    return self.actuator.q_id.shape[0]
 
 
 # below are some operation dispatch derivations

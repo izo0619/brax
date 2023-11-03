@@ -47,8 +47,8 @@ class GymWrapper(gym.Env):
     obs = np.inf * np.ones(self._env.observation_size, dtype='float32')
     self.observation_space = spaces.Box(-obs, obs, dtype='float32')
 
-    action = np.ones(self._env.action_size, dtype='float32')
-    self.action_space = spaces.Box(-action, action, dtype='float32')
+    action = jax.tree_map(np.array, self._env.sys.actuator.ctrl_range)
+    self.action_space = spaces.Box(action[:, 0], action[:, 1], dtype='float32')
 
     def reset(key):
       key1, key2 = jax.random.split(key)
@@ -82,7 +82,7 @@ class GymWrapper(gym.Env):
       sys, state = self._env.sys, self._state
       if state is None:
         raise RuntimeError('must call reset or step before rendering')
-      return image.render_array(sys, state.state, 256, 256)
+      return image.render_array(sys, state.pipeline_state, 256, 256)
     else:
       return super().render(mode=mode)  # just raise an exception
 
@@ -115,8 +115,8 @@ class VectorGymWrapper(gym.vector.VectorEnv):
     obs_space = spaces.Box(-obs, obs, dtype='float32')
     self.observation_space = utils.batch_space(obs_space, self.num_envs)
 
-    action = np.ones(self._env.action_size, dtype='float32')
-    action_space = spaces.Box(-action, action, dtype='float32')
+    action = jax.tree_map(np.array, self._env.sys.actuator.ctrl_range)
+    action_space = spaces.Box(action[:, 0], action[:, 1], dtype='float32')
     self.action_space = utils.batch_space(action_space, self.num_envs)
 
     def reset(key):
@@ -149,6 +149,6 @@ class VectorGymWrapper(gym.vector.VectorEnv):
       sys, state = self._env.sys, self._state
       if state is None:
         raise RuntimeError('must call reset or step before rendering')
-      return image.render_array(sys, state.state.take(0), 256, 256)
+      return image.render_array(sys, state.pipeline_state.take(0), 256, 256)
     else:
       return super().render(mode=mode)  # just raise an exception

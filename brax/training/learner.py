@@ -21,6 +21,7 @@ from absl import app
 from absl import flags
 from absl import logging
 from brax import envs
+from brax.experimental.barkour_v0 import barkour_joystick
 from brax.io import html
 from brax.io import metrics
 from brax.io import model
@@ -107,6 +108,7 @@ flags.DEFINE_integer(
 # PPO hps.
 flags.DEFINE_float('gae_lambda', .95, 'General advantage estimation lambda.')
 flags.DEFINE_float('clipping_epsilon', .3, 'Policy loss clipping epsilon.')
+flags.DEFINE_integer('num_resets_per_eval', 10, 'Number of resets per eval.')
 # ARS hps.
 flags.DEFINE_integer(
     'number_of_directions', 60,
@@ -118,8 +120,7 @@ flags.DEFINE_float('exploration_noise_std', 0.1,
                    'Std of a random noise added by ARS.')
 flags.DEFINE_float('reward_shift', 0.,
                    'A reward shift to get rid of "stay alive" bonus.')
-flags.DEFINE_enum('head_type', '', ['', 'clip', 'tanh'],
-                  'Which policy head to use.')
+
 # ARS hps.
 flags.DEFINE_integer('truncation_length', None,
                      'Truncation for gradient propagation in APG.')
@@ -199,7 +200,9 @@ def main(unused_argv):
           reward_scaling=FLAGS.reward_scaling,
           gae_lambda=FLAGS.gae_lambda,
           clipping_epsilon=FLAGS.clipping_epsilon,
-          progress_fn=writer.write_scalars)
+          num_resets_per_eval=FLAGS.num_resets_per_eval,
+          progress_fn=writer.write_scalars,
+      )
     if FLAGS.learner == 'apg':
       make_policy, params, _ = apg.train(
           environment=get_environment(FLAGS.env),

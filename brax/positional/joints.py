@@ -27,7 +27,7 @@ from jax import numpy as jp
 from jax.ops import segment_sum
 
 
-def acceleration_update(sys: System, state: State, tau: jp.ndarray) -> Motion:
+def acceleration_update(sys: System, state: State, tau: jax.Array) -> Force:
   """Calculates forces to apply to links resulting from joint constraints.
 
   Args:
@@ -36,13 +36,13 @@ def acceleration_update(sys: System, state: State, tau: jp.ndarray) -> Motion:
     tau: joint force vector
 
   Returns:
-    xdd_i: acceleration to apply to link center of mass in world frame
+    xf_i: force to apply to link center of mass in world frame
   """
 
   def _free_joint(*_) -> Force:
     return Force(vel=jp.zeros(3), ang=jp.zeros(3))
 
-  def _damp(link: Link, jd: Motion, dof: DoF, tau: jp.ndarray):
+  def _damp(link: Link, jd: Motion, dof: DoF, tau: jax.Array):
     vel = jp.sum(jax.vmap(jp.multiply)(tau, dof.motion.vel), axis=0)
     ang = jp.sum(jax.vmap(jp.multiply)(tau, dof.motion.ang), axis=0)
 
@@ -77,16 +77,7 @@ def acceleration_update(sys: System, state: State, tau: jp.ndarray) -> Motion:
   fp = Transform.create(pos=state.a_p.pos - x_i_parent.pos).vmap().do(xf)
   fp = jax.tree_map(lambda x: segment_sum(x, parent_idx, sys.num_links()), fp)
   xf_i = fc - fp
-
-  # convert to acceleration
-  inv_mass = 1 / (sys.link.inertia.mass ** (1 - sys.spring_mass_scale))
-  inv_inertia = com.inv_inertia(sys, state.x)
-  xdd_i = Motion(
-      ang=jax.vmap(lambda x, y: x @ y)(inv_inertia, xf_i.ang),
-      vel=jax.vmap(lambda x, y: x * y)(inv_mass, xf_i.vel),
-  )
-
-  return xdd_i
+  return xf_i
 
 
 def position_update(sys: System, state: State) -> Transform:
@@ -130,13 +121,13 @@ def position_update(sys: System, state: State) -> Transform:
 def _translation_update(
     pos_p: Transform,
     xi_p: Transform,
-    i_inv_p: jp.ndarray,
-    mass_inv_p: jp.ndarray,
+    i_inv_p: jax.Array,
+    mass_inv_p: jax.Array,
     pos_c: Transform,
     xi_c: Transform,
-    i_inv_c: jp.ndarray,
-    mass_inv_c: jp.ndarray,
-    dx: jp.ndarray,
+    i_inv_c: jax.Array,
+    mass_inv_c: jax.Array,
+    dx: jax.Array,
 ) -> Tuple[Transform, Transform]:
   """Calculates a position based translational update."""
 
@@ -158,10 +149,10 @@ def _translation_update(
 
 def _rotation_update(
     xi_p: Transform,
-    i_inv_p: jp.ndarray,
+    i_inv_p: jax.Array,
     xi_c: Transform,
-    i_inv_c: jp.ndarray,
-    dq: jp.ndarray,
+    i_inv_c: jax.Array,
+    dq: jax.Array,
 ) -> Tuple[Transform, Transform]:
   """Calculates a position based rotational update."""
 
@@ -223,7 +214,7 @@ def _sphericalize(sys, j):
 
 def _three_dof_joint_update(
     x: Transform,
-    limit: Tuple[jp.ndarray, jp.ndarray],
+    limit: Tuple[jax.Array, jax.Array],
     motion: Motion,
     joint_frame: Motion,
     parity: float,

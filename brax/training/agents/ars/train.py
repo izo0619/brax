@@ -17,10 +17,12 @@
 See: https://arxiv.org/pdf/1803.07055.pdf
 """
 
+import functools
 import time
-from typing import Callable, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Union
 
 from absl import logging
+from brax import base
 from brax import envs
 from brax.training import acting
 from brax.training import types
@@ -64,9 +66,13 @@ def train(
     num_evals: int = 1,
     reward_shift: float = 0.0,
     network_factory: types.NetworkFactory[
-        ars_networks.ARSNetwork] = ars_networks.make_policy_network,
+        ars_networks.ARSNetwork
+    ] = ars_networks.make_policy_network,
     progress_fn: Callable[[int, Metrics], None] = lambda *args: None,
     eval_env: Optional[envs.Env] = None,
+    randomization_fn: Optional[
+        Callable[[base.System, jnp.ndarray], Tuple[base.System, base.System]]
+    ] = None,
 ):
   """ARS."""
   top_directions = min(top_directions, number_of_directions)
@@ -87,6 +93,9 @@ def train(
   num_env_steps_between_evals = num_timesteps // num_evals
   next_eval_step = num_timesteps - (num_evals - 1) * num_env_steps_between_evals
 
+  key = jax.random.PRNGKey(seed)
+  key, network_key, eval_key, rng_key = jax.random.split(key, 4)
+
   assert num_envs % local_devices_to_use == 0
   env = environment
   if isinstance(env, envs.Env):
@@ -94,8 +103,18 @@ def train(
   else:
     wrap_for_training = envs_v1.wrappers.wrap_for_training
 
+  v_randomization_fn = None
+  if randomization_fn is not None:
+    v_randomization_fn = functools.partial(
+        randomization_fn,
+        rng=jax.random.split(rng_key, num_envs // local_devices_to_use),
+    )
   env = wrap_for_training(
-      env, episode_length=episode_length, action_repeat=action_repeat)
+      env,
+      episode_length=episode_length,
+      action_repeat=action_repeat,
+      randomization_fn=v_randomization_fn,
+  )
 
   obs_size = env.observation_size
 
@@ -141,8 +160,9 @@ def train(
     noise = jax.tree_util.tree_map(
         lambda g, k: jax.random.normal(k, shape=g.shape, dtype=g.dtype), params,
         jax.tree_util.tree_unflatten(treedef, all_keys))
-    params_with_noise = jax.tree_util.tree_map(lambda g, n: g + n * exploration_noise_std,
-                                     params, noise)
+    params_with_noise = jax.tree_util.tree_map(
+        lambda g, n: g + n * exploration_noise_std, params, noise
+    )
     params_with_anti_noise = jax.tree_util.tree_map(
         lambda g, n: g - n * exploration_noise_std, params, noise)
     return params_with_noise, params_with_anti_noise, noise
@@ -154,15 +174,20 @@ def train(
                      key: PRNGKey) -> Tuple[TrainingState, Metrics]:
     params = jax.tree_util.tree_map(
         lambda x: jnp.repeat(
-            jnp.expand_dims(x, axis=0), number_of_directions, axis=0),
-        training_state.policy_params)
+            jnp.expand_dims(x, axis=0), number_of_directions, axis=0
+        ),
+        training_state.policy_params,
+    )
     key, key_noise, key_es_eval = jax.random.split(key, 3)
     # generate perturbations
     params_with_noise, params_with_anti_noise, noise = add_noise(
         params, key_noise)
 
-    pparams = jax.tree_util.tree_map(lambda a, b: jnp.concatenate([a, b], axis=0),
-                           params_with_noise, params_with_anti_noise)
+    pparams = jax.tree_util.tree_map(
+        lambda a, b: jnp.concatenate([a, b], axis=0),
+        params_with_noise,
+        params_with_anti_noise,
+    )
 
     pparams = jax.tree_util.tree_map(
         lambda x: jnp.reshape(x, (local_devices_to_use, -1) + x.shape[1:]),
@@ -187,13 +212,17 @@ def train(
     reward_weight_double = jnp.concatenate([reward_weight, reward_weight],
                                            axis=0)
     reward_std = jnp.std(eval_scores, where=reward_weight_double)
+    reward_std += (reward_std == 0.0) * 1e-6
 
     noise = jax.tree_util.tree_map(
         lambda x: jnp.sum(
             jnp.transpose(
-                jnp.transpose(x) * reward_weight *
-                (reward_plus - reward_minus)),
-            axis=0), noise)
+                jnp.transpose(x) * reward_weight * (reward_plus - reward_minus)
+            ),
+            axis=0,
+        ),
+        noise,
+    )
 
     policy_params = jax.tree_util.tree_map(
         lambda x, y: x + step_size * y / (top_directions * reward_std),
@@ -208,7 +237,7 @@ def train(
         'eval_scores_std': jnp.std(eval_scores),
         'weights': jnp.mean(reward_weight),
     }
-    return (TrainingState(  # pytype: disable=bad-return-type  # numpy-scalars
+    return (TrainingState(  # type: ignore  # jnp-type
         normalizer_params=normalizer_params,
         policy_params=policy_params,
         num_env_steps=num_env_steps), metrics)
@@ -232,13 +261,10 @@ def train(
         'training/walltime': training_walltime,
         **{f'training/{name}': value for name, value in metrics.items()}
     }
-    return training_state, metrics
-
-  key = jax.random.PRNGKey(seed)
-  key, network_key, eval_key = jax.random.split(key, 3)
+    return training_state, metrics  # pytype: disable=bad-return-type  # py311-upgrade
 
   normalizer_params = running_statistics.init_state(
-      specs.Array((obs_size,), jnp.float32))
+      specs.Array((obs_size,), jnp.dtype('float32')))
   policy_params = ars_network.init(network_key)
   training_state = TrainingState(
       normalizer_params=normalizer_params,
@@ -246,10 +272,18 @@ def train(
       num_env_steps=0)
 
   if not eval_env:
-    eval_env = env
-  else:
-    eval_env = wrap_for_training(
-        eval_env, episode_length=episode_length, action_repeat=action_repeat)
+    eval_env = environment
+
+  if randomization_fn is not None:
+    v_randomization_fn = functools.partial(
+        randomization_fn, rng=jax.random.split(eval_key, num_eval_envs)
+    )
+  eval_env = wrap_for_training(
+      eval_env,
+      episode_length=episode_length,
+      action_repeat=action_repeat,
+      randomization_fn=v_randomization_fn,
+  )
 
   # Evaluator function
   evaluator = acting.Evaluator(

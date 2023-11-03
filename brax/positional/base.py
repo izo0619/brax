@@ -18,6 +18,8 @@
 from brax import base
 from brax.base import Motion, Transform
 from flax import struct
+import jax
+import jax.numpy as jp
 
 
 @struct.dataclass
@@ -31,6 +33,7 @@ class State(base.State):
     jd: link motion in joint frame
     a_p: joint parent anchor in world frame
     a_c: joint child anchor in world frame
+    mass: link mass
   """
 
   x_i: Transform
@@ -39,3 +42,4 @@ class State(base.State):
   jd: Motion
   a_p: Transform
   a_c: Transform
+  mass: jax.Array

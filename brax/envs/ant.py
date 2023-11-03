@@ -190,9 +190,9 @@ class Ant(PipelineEnv):
         if self._use_contact_forces:
             raise NotImplementedError('use_contact_forces not implemented.')
 
-    def reset(self, rng: jp.ndarray) -> State:
-        """Resets the environment to an initial state."""
-        rng, rng1, rng2 = jax.random.split(rng, 3)
+  def reset(self, rng: jax.Array) -> State:
+    """Resets the environment to an initial state."""
+    rng, rng1, rng2 = jax.random.split(rng, 3)
 
         low, hi = -self._reset_noise_scale, self._reset_noise_scale
         q = self.sys.init_q + jax.random.uniform(
@@ -218,10 +218,10 @@ class Ant(PipelineEnv):
         }
         return State(pipeline_state, obs, reward, done, metrics)
 
-    def step(self, state: State, action: jp.ndarray) -> State:
-        """Run one timestep of the environment's dynamics."""
-        pipeline_state0 = state.pipeline_state
-        pipeline_state = self.pipeline_step(pipeline_state0, action)
+  def step(self, state: State, action: jax.Array) -> State:
+    """Run one timestep of the environment's dynamics."""
+    pipeline_state0 = state.pipeline_state
+    pipeline_state = self.pipeline_step(pipeline_state0, action)
 
         velocity = (pipeline_state.x.pos[0] -
                     pipeline_state0.x.pos[0]) / self.dt
@@ -258,10 +258,10 @@ class Ant(PipelineEnv):
             pipeline_state=pipeline_state, obs=obs, reward=reward, done=done
         )
 
-    def _get_obs(self, pipeline_state: base.State) -> jp.ndarray:
-        """Observe ant body position and velocities."""
-        qpos = pipeline_state.q
-        qvel = pipeline_state.qd
+  def _get_obs(self, pipeline_state: base.State) -> jax.Array:
+    """Observe ant body position and velocities."""
+    qpos = pipeline_state.q
+    qvel = pipeline_state.qd
 
         if self._exclude_current_positions_from_observation:
             qpos = pipeline_state.q[2:]

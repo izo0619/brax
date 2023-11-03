@@ -21,6 +21,7 @@ import dm_env
 from dm_env import specs
 import jax
 from jax import numpy as jp
+import numpy as np
 
 
 class DmEnvWrapper(dm_env.Environment):
@@ -48,14 +49,14 @@ class DmEnvWrapper(dm_env.Environment):
     if hasattr(self._env, 'action_spec'):
       self._action_spec = self._env.action_spec()
     else:
-      action_high = jp.ones(self._env.action_size, dtype='float32')
+      action = jax.tree_map(np.array, self._env.sys.actuator.ctrl_range)
       self._action_spec = specs.BoundedArray((self._env.action_size,),
-                                             minimum=-action_high,
-                                             maximum=action_high,
+                                             minimum=action[:, 0],
+                                             maximum=action[:, 1],
                                              dtype='float32',
                                              name='action')
 
-    self._reward_spec = specs.Array(shape=(), dtype='float32', name='reward')
+    self._reward_spec = specs.Array(shape=(), dtype=jp.dtype('float32'), name='reward')
     self._discount_spec = specs.BoundedArray(
         shape=(), dtype='float32', minimum=0., maximum=1., name='discount')
     if hasattr(self._env, 'discount_spec'):
@@ -111,4 +112,4 @@ class DmEnvWrapper(dm_env.Environment):
     sys, state = self._env.sys, self._state
     if state is None:
       raise RuntimeError('must call reset or step before rendering')
-    return image.render_array(sys, state.state, 256, 256)
+    return image.render_array(sys, state.pipeline_state, 256, 256)

@@ -20,6 +20,7 @@ import logging
 from typing import Dict, Tuple, Union
 
 from brax.base import Box, Convex, Mesh
+import jax
 from jax import numpy as jp
 import numpy as np
 from scipy import spatial
@@ -54,7 +55,7 @@ _MAX_HULL_FACE_VERTICES = 20
 _CONVEX_CACHE: Dict[Tuple[int, int], Convex] = {}
 
 
-def get_face_norm(vert: jp.ndarray, face: jp.ndarray) -> jp.ndarray:
+def get_face_norm(vert: jax.Array, face: jax.Array) -> jax.Array:
   """Calculates face normals given vertices and face indexes."""
   assert len(vert.shape) == 2 and len(face.shape) == 2, (
       f'vert and face should have dim of 2, got {len(vert.shape)} and '
@@ -115,7 +116,7 @@ def _box(b: Box, triangulated=True) -> Tuple[np.ndarray, np.ndarray]:
   box_faces = _TRIANGULATED_BOX_FACES if triangulated else _BOX_FACES
   face_dim = 3 if triangulated else 4
   face = jp.array([box_faces]).reshape(-1, face_dim)
-  return vert, face
+  return vert, face  # pytype: disable=bad-return-type  # jnp-type
 
 
 def box_tri(b: Box) -> Mesh:
@@ -128,6 +129,7 @@ def box_tri(b: Box) -> Mesh:
       transform=b.transform,
       friction=b.friction,
       elasticity=b.elasticity,
+      solver_params=b.solver_params,
       rgba=b.rgba,
   )
 
@@ -142,6 +144,7 @@ def _box_hull(b: Box) -> Convex:
       transform=b.transform,
       friction=b.friction,
       elasticity=b.elasticity,
+      solver_params=b.solver_params,
       unique_edge=get_unique_edges(vert, face),
       rgba=b.rgba,
   )
@@ -225,6 +228,7 @@ def _convex_hull(m: Mesh) -> Convex:
       transform=m.transform,
       friction=m.friction,
       elasticity=m.elasticity,
+      solver_params=m.solver_params,
       unique_edge=get_unique_edges(vert, face),
       rgba=m.rgba,
   )
@@ -244,6 +248,7 @@ def convex_hull(obj: Union[Box, Mesh]) -> Convex:
       transform=obj.transform,
       friction=obj.friction,
       elasticity=obj.elasticity,
+      solver_params=obj.solver_params,
       rgba=obj.rgba,
   )
   return convex
