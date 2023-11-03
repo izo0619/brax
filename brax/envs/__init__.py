@@ -31,6 +31,7 @@ from brax.envs import reacher
 from brax.envs import walker2d
 from brax.envs.base import Env, PipelineEnv, State, Wrapper
 from brax.envs.wrappers import training
+from brax.envs import links
 
 _envs = {
     'ant': ant.Ant,
@@ -44,6 +45,7 @@ _envs = {
     'pusher': pusher.Pusher,
     'reacher': reacher.Reacher,
     'walker2d': walker2d.Walker2d,
+    'links': links.Links,
 }
 
 
