@@ -37,8 +37,13 @@ class Links(PipelineEnv):
 
     def reset(self, rng: jax.Array) -> State:
         rng, rng1, rng2 = jax.random.split(rng, 3)
-        qpos = self.sys.init_q + self._noise(rng1)
-        qvel = self._noise(rng2)
+        low, hi = -self._reset_noise_scale, self._reset_noise_scale
+        qpos = self.sys.init_q + jax.random.uniform(
+            rng1, (self.sys.q_size(),), minval=low, maxval=hi
+        )
+        qvel = jax.random.uniform(
+            rng2, (self.sys.qd_size(),), minval=low, maxval=hi
+        )
         pipeline_state = self.pipeline_init(qpos, qvel)
         obs = self._get_obs(pipeline_state)
         reward, done, zero = jp.zeros(3)
