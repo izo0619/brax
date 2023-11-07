@@ -17,7 +17,7 @@ class Links(PipelineEnv):
                exclude_current_positions_from_observation=True,
                backend='generalized',
                **kwargs):
-        path = epath.resource_path('brax') / 'envs/assets/random_morph/random_morph_1.xml'
+        path = epath.resource_path('brax') / 'envs/assets/random_morph/random_morph_2.xml'
         sys = mjcf.load(path)
 
         n_frames = 4
