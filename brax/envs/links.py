@@ -62,15 +62,15 @@ class Links(PipelineEnv):
     def step(self, state: State, action: jax.Array) -> State:
         pipeline_state0 = state.pipeline_state
         pipeline_state = self.pipeline_step(pipeline_state0, action)
-        print('pipeline_state0')
-        print(pipeline_state0)
-        print('pipeline_state')
-        print(pipeline_state)
+        # print('pipeline_state0')
+        # print(pipeline_state0)
+        # print('pipeline_state')
+        # print(pipeline_state)
         if pipeline_state0 is None:
             raise AssertionError(
                 'Cannot compute rewards with pipeline_state0 as Nonetype.')
-        print('action')
-        print(action)
+        # print('action')
+        # print(action)
         xy_position = pipeline_state.q[:2]
 
         x_velocity = (xy_position[0] - pipeline_state0.q[0]) / self.dt
