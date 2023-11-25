@@ -1,0 +1,67 @@
+<mujoco model="morphology">
+  <option timestep="0.01"/>
+  <default>
+    <default class="/"/>
+    <default class="0/"/>
+    <default class="0/1/"/>
+    <default class="0/1/2/"/>
+    <default class="0/1/2/3/"/>
+    <default class="0/1/2/3/4/"/>
+    <default class="0/1/5/"/>
+  </default>
+  <asset>
+    <texture name="texplane" type="2d" builtin="checker" rgb1="0.10000000000000001 0.20000000000000001 0.29999999999999999" rgb2="0.20000000000000001 0.29999999999999999 0.40000000000000002" width="300" height="300"/>
+    <material name="MatPlane" class="/" texture="texplane" texrepeat="20 20" specular="1" shininess="1" reflectance="0.5"/>
+  </asset>
+  <worldbody>
+    <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3" cutoff="100" exponent="1" diffuse="1 1 1" specular="0.10000000000000001 0.10000000000000001 0.10000000000000001"/>
+    <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane" rgba="1 1 1 1"/>
+    <site name="body" class="/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="0 0 0.7935300827026367"/>
+    <body pos="0 0 0.7935300827026367" name="0/">
+      <joint name="0/rootx/" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0" armature="0" damping="0"/>
+      <joint name="0/rootz/" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
+      <joint name="0/rooty/" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="0" armature="0" damping="0"/>
+      <geom name="0/geom" class="0/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.042923046579717475" rgba="0.08395124422973621 0.69610964799075836 0.10300751364634653 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 0.64485148631823175 0 -0.22028863561172818"/>
+      <site name="0/end0" class="0/" size="0.0050000000000000001" pos="0.64485148631823175 0 -0.22028863561172818"/>
+      <site name="0/attach1" class="0/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="0.015399327553469452 0 -0.0052605862405003308"/>
+      <body pos="0.015399327553469452 0 -0.0052605862405003308" name="0/1/">
+        <joint name="0/1/joint/" class="0/" type="hinge" axis="0 1 0" limited="true" stiffness="100" range="-67.810189088839252 67.810189088839252" armature="0.20000000000000001" damping="3.5"/>
+        <geom name="0/1/geom" class="0/1/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.048071004761507267" rgba="0.17035754186403207 0.5095059777279215 0.32983880728668824 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 0.0062044197038731985 0 0.058867287315123473"/>
+        <site name="0/1/end1" class="0/1/" size="0.0050000000000000001" pos="0.0062044197038731985 0 0.058867287315123473"/>
+        <site name="0/1/attach2" class="0/1/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="0.0017653429877140486 0 0.016749504035426105"/>
+        <body pos="0.0017653429877140486 0 0.016749504035426105" name="0/1/2/">
+          <joint name="0/1/2/joint/" class="0/1/" type="hinge" axis="0 1 0" limited="true" stiffness="100" range="-37.499142608596465 37.499142608596465" armature="0.20000000000000001" damping="3.5"/>
+          <geom name="0/1/2/geom" class="0/1/2/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.062026244908342798" rgba="0.13433312027969557 0.44120760484826271 0.73225007834711742 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 -0.68965770274950144 0 -0.37304682871365186"/>
+          <site name="0/1/2/end2" class="0/1/2/" size="0.0050000000000000001" pos="-0.68965770274950144 0 -0.37304682871365186"/>
+          <site name="0/1/2/attach3" class="0/1/2/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="-0.40989768697357498 0 -0.2217201832342818"/>
+          <body pos="-0.40989768697357498 0 -0.2217201832342818" name="0/1/2/3/">
+            <joint name="0/1/2/3/joint/" class="0/1/2/" type="hinge" axis="0 1 0" limited="true" stiffness="100" range="-51.768242693608997 51.768242693608997" armature="0.20000000000000001" damping="3.5"/>
+            <geom name="0/1/2/3/geom" class="0/1/2/3/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.055894161470635348" rgba="0.32877241143764924 0.15974500466989527 0.055088412694696998 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 -0.24133986294295173 0 0.65728906771294193"/>
+            <site name="0/1/2/3/end3" class="0/1/2/3/" size="0.0050000000000000001" pos="-0.24133986294295173 0 0.65728906771294193"/>
+            <site name="0/1/2/3/attach4" class="0/1/2/3/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="-0.013346448042181982 0 0.036349048532436867"/>
+            <body pos="-0.013346448042181982 0 0.036349048532436867" name="0/1/2/3/4/">
+              <geom name="0/1/2/3/4/geom" class="0/1/2/3/4/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.067844326734448748" rgba="0.22772849683644636 0.34033659190179189 0.21848038345075238 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 -0.61357263879991519 0 0.20260829238607303"/>
+              <site name="0/1/2/3/4/end4" class="0/1/2/3/4/" size="0.0050000000000000001" pos="-0.61357263879991519 0 0.20260829238607303"/>
+            </body>
+          </body>
+        </body>
+        <site name="0/1/attach5" class="0/1/" size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07" pos="0.0012208409713060694 0 0.011583290566091847"/>
+        <body pos="0.0012208409713060694 0 0.011583290566091847" name="0/1/5/">
+          <joint name="0/1/5/joint/" class="0/1/" type="hinge" axis="0 1 0" limited="true" stiffness="100" range="-59.869663220779508 59.869663220779508" armature="0.20000000000000001" damping="3.5"/>
+          <geom name="0/1/5/geom" class="0/1/5/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.057304578720198715" rgba="0.2886784215338043 0.94406859701684764 0.027529730321813606 1" friction="0.59999999999999998 0.10000000000000001 0.10000000000000001" fromto="0 0 0 -0.051163413342110053 0 -0.69985278307856913"/>
+          <site name="0/1/5/end5" class="0/1/5/" size="0.0050000000000000001" pos="-0.051163413342110053 0 -0.69985278307856913"/>
+        </body>
+      </body>
+      <camera name="0/side" class="0/" mode="trackcom" pos="0.40000000000000002 -4 0.20000000000000001" quat="0.70699999999999996 0.70699999999999996 0 0"/>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="0/1/motor" class="0/1/" ctrllimited="true" ctrlrange="-1 1" gear="87" joint="0/1/joint/"/>
+    <motor name="0/1/2/motor" class="0/1/2/" ctrllimited="true" ctrlrange="-1 1" gear="67" joint="0/1/2/joint/"/>
+    <motor name="0/1/2/3/motor" class="0/1/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="79" joint="0/1/2/3/joint/"/>
+    <motor name="0/1/5/motor" class="0/1/5/" ctrllimited="true" ctrlrange="-1 1" gear="71" joint="0/1/5/joint/"/>
+  </actuator>
+  <sensor>
+    <subtreelinvel name="velocity" body="0/"/>
+  </sensor>
+</mujoco>
