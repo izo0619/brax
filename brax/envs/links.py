@@ -42,7 +42,7 @@ class Links(PipelineEnv):
             rng1, (self.sys.q_size(),), minval=low, maxval=hi
         )
         qvel = jax.random.uniform(
-            0, (self.sys.qd_size(),), minval=low, maxval=hi
+            rng2, (self.sys.qd_size(),), minval=low, maxval=0
         )
         pipeline_state = self.pipeline_init(qpos, qvel)
         obs = self._get_obs(pipeline_state)
