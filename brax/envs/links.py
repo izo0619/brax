@@ -18,7 +18,7 @@ class Links(PipelineEnv):
                backend='generalized',
                i=0,
                **kwargs):
-        path = epath.resource_path('brax') / f'envs/assets/100_gen_3d/random_morph_{i}.xml'
+        path = epath.resource_path('brax') / f'envs/assets/100_gen/random_morph_{i}.xml'
         sys = mjcf.load(path)
 
         n_frames = 4
@@ -40,10 +40,10 @@ class Links(PipelineEnv):
         rng, rng1, rng2 = jax.random.split(rng, 3)
         low, hi = -self._reset_noise_scale, self._reset_noise_scale
         qpos = self.sys.init_q + jax.random.uniform(
-            rng1, (self.sys.q_size(),), minval=low, maxval=hi
+            rng1, (self.sys.q_size(),), minval=0, maxval=0
         )
         qvel = jax.random.uniform(
-            rng2, (self.sys.qd_size(),), minval=low, maxval=0
+            rng2, (self.sys.qd_size(),), minval=0, maxval=0
         )
         pipeline_state = self.pipeline_init(qpos, qvel)
         obs = self._get_obs(pipeline_state)
