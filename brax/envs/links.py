@@ -23,8 +23,8 @@ class Links(PipelineEnv):
 
         n_frames = 4
 
-        if backend not in ['generalized']:
-            raise ValueError(f'Unsupported backend: {backend}.')
+        # if backend not in ['generalized']:
+        #     raise ValueError(f'Unsupported backend: {backend}.')
 
         kwargs['n_frames'] = kwargs.get('n_frames', n_frames)
 
