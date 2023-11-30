@@ -42,13 +42,14 @@
                 size="0.043172814288833079 0.59407"
                 rgba="0.88646084083706944 0.16256069909897441 0.14196218599377186 1"
                 friction="0.59999999999999998 0.10000000000000001 0.10000000000000001"
+                pos="0.28525 0 0.08285" zaxis="0.5720556447	0	0.1656735534"
             />
             <site name="0/end0" class="0/" size="0.0050000000000000001"
                 pos="0.57205564467500958 0 0.16567355341617773" />
             <site name="0/attach1" class="0/"
                 size="9.9999999999999995e-07 9.9999999999999995e-07 9.9999999999999995e-07"
                 pos="0.30326548163533512 0 0.087828990831019832" />
-            <body pos="0.30326548163533512 0 0.087828990831019832" name="0/1/">
+            <!-- <body pos="0.30326548163533512 0 0.087828990831019832" name="0/1/">
                 <geom name="0/1/geom" class="0/1/" type="capsule" contype="1" conaffinity="1"
                     condim="3" size="0.050269690790261834 0.3699350916"
                     rgba="0.95044212911003889 0.92296779845611876 0.97421156684332455 1"
@@ -200,15 +201,16 @@
                         pos="0.02909867934	0	0.2956132576" />
                     <site name="0/9/10/end10" class="0/9/10/" size="0.0050000000000000001"
                         pos="0.058197358689595191 0 0.5912265152683398" />
-                </body>
-            </body>
+                </body> -->
+            <!-- </body>
             <camera name="0/side" class="0/" mode="trackcom"
                 pos="0.40000000000000002 -4 0.20000000000000001"
-                quat="0.70699999999999996 0.70699999999999996 0 0" />
+                quat="0.70699999999999996 0.70699999999999996 0 0" /> -->
         </body>
     </worldbody>
     <actuator>
-        <motor name="0/1/2/3/motor" class="0/1/2/3/" ctrllimited="true" ctrlrange="-1 1" gear="83"
+        <!-- <motor name="0/1/2/3/motor" class="0/1/2/3/" ctrllimited="true" ctrlrange="-1 1"
+        gear="83"
             joint="0/1/2/3/joint/" />
         <motor name="0/1/2/4/5/6/motor" class="0/1/2/4/5/6/" ctrllimited="true" ctrlrange="-1 1"
             gear="85" joint="0/1/2/4/5/6/joint/" />
@@ -217,7 +219,7 @@
         <motor name="0/9/motor" class="0/9/" ctrllimited="true" ctrlrange="-1 1" gear="88"
             joint="0/9/joint/" />
         <motor name="0/9/10/motor" class="0/9/10/" ctrllimited="true" ctrlrange="-1 1" gear="58"
-            joint="0/9/10/joint/" />
+            joint="0/9/10/joint/" /> -->
     </actuator>
     <sensor>
         <subtreelinvel name="velocity" body="0/" />
