@@ -26,8 +26,6 @@ from brax.generalized import mass
 from brax.generalized.base import State
 import jax
 from jax import numpy as jp
-from jax import config
-config.update("jax_debug_nans", True)
 
 
 def init(
