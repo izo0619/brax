@@ -115,7 +115,7 @@ class PipelineEnv(Env):
 
   def pipeline_step(self, pipeline_state: Any, action: jax.Array) -> base.State:
     """Takes a physics step using the physics pipeline."""
-
+    print("taking a step")
     def f(state, _):
       return (
           self._pipeline.step(self.sys, state, action, self._debug),
