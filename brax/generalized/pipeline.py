@@ -71,16 +71,25 @@ def step(
   """
   # calculate acceleration terms
   tau = actuator.to_tau(sys, act, state.q, state.qd)
+  print("tau")
   state = state.replace(qf_smooth=dynamics.forward(sys, state, tau))
+  print("qf_smooth")
   state = state.replace(qf_constraint=constraint.force(sys, state))
+  print("qf_constraint")
 
   # update position/velocity level terms
   state = integrator.integrate(sys, state)
+  print("integrate")
   x, xd = kinematics.forward(sys, state.q, state.qd)
+  print("forward")
   state = state.replace(x=x, xd=xd)
+  print("replace")
   state = dynamics.transform_com(sys, state)
+  print("transform_com")
   state = mass.matrix_inv(sys, state, sys.matrix_inv_iterations)
+  print("matrix_inv")
   state = constraint.jacobian(sys, state)
+  print("jacobian")
 
   if debug:
     state = state.replace(contact=geometry.contact(sys, state.x))
