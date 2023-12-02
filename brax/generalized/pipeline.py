@@ -86,7 +86,7 @@ def step(
   jax.debug.print("{}", state.x.pos)
   x, xd = kinematics.forward(sys, state.q, state.qd)
   print("forward")
-  jax.debug.print(state.x.pos)
+  jax.debug.print("{}", state.x.pos)
   state = state.replace(x=x, xd=xd)
   print("replace")
   jax.debug.print("{}", state.x.pos)
