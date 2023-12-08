@@ -18,7 +18,7 @@ class Links(PipelineEnv):
                backend='generalized',
                i=0,
                **kwargs):
-        path = epath.resource_path('brax') / f'envs/assets/hand_gen/handmade1.xml'
+        path = epath.resource_path('brax') / f'envs/assets/hand_gen/handmade_{i}.xml'
         sys = mjcf.load(path)
 
         n_frames = 4
