@@ -15,8 +15,8 @@
       <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
       <joint name="rooty" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="0" armature="0" damping="0"/>
       <body name="//unnamed_body_1" pos="1 0 0">
-        <joint name="joint1" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-        <geom name="//unnamed_geom_2" class="/" type="capsule" size="0.05" rgba="0.4 0.6 0.7 1" fromto="0 0 0 1 0 0"/>
+        <joint name="joint1" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+        <geom name="//unnamed_geom_2" class="/" type="capsule" size="0.05" rgba="0 0.6 0.2 1" fromto="0 0 0 1 0 0"/>
       </body>
     </body>
   </worldbody>

@@ -15,23 +15,23 @@
       <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
       <joint name="rooty" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="0" armature="0" damping="0"/>
       <body name="//unnamed_body_1" pos="1 0 0">
-        <joint name="joint1" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-        <geom name="//unnamed_geom_2" class="/" type="capsule" size="0.05" rgba="0.6 0 0.7 1" fromto="0 0 0 1 0 0"/>
+        <joint name="joint1" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+        <geom name="//unnamed_geom_2" class="/" type="capsule" size="0.05" rgba="0.6 0.1 0.7 1" fromto="0 0 0 1 0 0"/>
         <body name="//unnamed_body_2" pos="1 0 0">
-          <joint name="joint2" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-          <geom name="//unnamed_geom_3" class="/" type="capsule" size="0.05" rgba="0.5 0.1 0.1 1" fromto="0 0 0 1 0 0"/>
+          <joint name="joint2" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+          <geom name="//unnamed_geom_3" class="/" type="capsule" size="0.05" rgba="0.4 0.8 0.3 1" fromto="0 0 0 1 0 0"/>
           <body name="//unnamed_body_3" pos="1 0 0">
-            <joint name="joint3" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-            <geom name="//unnamed_geom_4" class="/" type="capsule" size="0.05" rgba="0.4 0.8 0.1 1" fromto="0 0 0 1 0 0"/>
+            <joint name="joint3" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+            <geom name="//unnamed_geom_4" class="/" type="capsule" size="0.05" rgba="0.1 0.2 0 1" fromto="0 0 0 1 0 0"/>
             <body name="//unnamed_body_4" pos="1 0 0">
-              <joint name="joint4" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-              <geom name="//unnamed_geom_5" class="/" type="capsule" size="0.05" rgba="0.5 0.5 0.5 1" fromto="0 0 0 1 0 0"/>
+              <joint name="joint4" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+              <geom name="//unnamed_geom_5" class="/" type="capsule" size="0.05" rgba="0.5 0 0.2 1" fromto="0 0 0 1 0 0"/>
               <body name="//unnamed_body_5" pos="1 0 0">
-                <joint name="joint5" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-                <geom name="//unnamed_geom_6" class="/" type="capsule" size="0.05" rgba="0.7 0.3 0.7 1" fromto="0 0 0 1 0 0"/>
+                <joint name="joint5" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+                <geom name="//unnamed_geom_6" class="/" type="capsule" size="0.05" rgba="0.4 0.7 0.6 1" fromto="0 0 0 1 0 0"/>
                 <body name="//unnamed_body_6" pos="1 0 0">
-                  <joint name="joint6" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40"/>
-                  <geom name="//unnamed_geom_7" class="/" type="capsule" size="0.05" rgba="0.4 0.2 0.1 1" fromto="0 0 0 1 0 0"/>
+                  <joint name="joint6" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-40 40" armature="0.2"/>
+                  <geom name="//unnamed_geom_7" class="/" type="capsule" size="0.05" rgba="0.6 0.1 0.7 1" fromto="0 0 0 1 0 0"/>
                 </body>
               </body>
             </body>
