@@ -9,30 +9,30 @@
   <worldbody>
     <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3" cutoff="1e+02" exponent="1" diffuse="1 1 1" specular="0.1 0.1 0.1"/>
     <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane" rgba="1 1 1 1"/>
-    <body name="body" pos="0 0 0.63">
-      <geom name="geom0" class="/" type="capsule" size="0.049 0.17" rgba="0.57 0.083 0.72 1" pos="0.13 0 0.11" zaxis="0.25 0 0.22"/>
-      <body name="body1" pos="0.12 0 0.11">
-        <geom name="geom1" class="/" type="capsule" size="0.062 0.4" rgba="0.63 0.63 0.54 1" pos="0.24 0 -0.32" zaxis="0.49 0 -0.64"/>
-        <body name="body2" pos="0.35 0 -0.46">
-          <geom name="geom2" class="/" type="capsule" size="0.048 0.37" rgba="0.98 0.44 0.92 1" pos="0.091 0 0.36" zaxis="0.18 0 0.71"/>
-          <body name="body3" pos="0.16 0 0.63">
-            <geom name="geom3" class="/" type="capsule" size="0.062 0.45" rgba="0.14 0.16 0.32 1" pos="-0.34 0 0.3" zaxis="-0.68 0 0.6"/>
+    <body name="body" pos="0 0 0.94">
+      <geom name="geom0" class="/" type="capsule" size="0.054" rgba="0.054 0.84 0.82 1" fromto="0 0 0 -0.66 0 -0.73"/>
+      <body name="body1" pos="-0.42 0 -0.47">
+        <geom name="geom1" class="/" type="capsule" size="0.048" rgba="0.68 0.75 0.9 1" fromto="0 0 0 -0.2 0 0.47"/>
+        <body name="body2" pos="-0.18 0 0.43">
+          <geom name="geom2" class="/" type="capsule" size="0.049" rgba="0.022 0.67 0.13 1" fromto="0 0 0 -0.56 0 0.059"/>
+          <body name="body3" pos="-0.11 0 0.011">
+            <geom name="geom3" class="/" type="capsule" size="0.061" rgba="0.75 0.44 0.54 1" fromto="0 0 0 -0.19 0 0.64"/>
+            <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" range="-63 63"/>
           </body>
-          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" range="-51 51"/>
+          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" range="-59 59"/>
         </body>
-        <body name="body4" pos="0.39 0 -0.52">
-          <geom name="geom4" class="/" type="capsule" size="0.069 0.21" rgba="0.69 0.21 0.5 1" pos="0.2 0 0.062" zaxis="0.39 0 0.12"/>
-          <joint name="joint4" class="/" type="hinge" axis="0 1 0" limited="true" range="-62 62"/>
+        <body name="body4" pos="-0.17 0 0.4">
+          <geom name="geom4" class="/" type="capsule" size="0.042" rgba="0.37 0.94 0.43 1" fromto="0 0 0 -0.57 0 -0.56"/>
+          <body name="body5" pos="-0.51 0 -0.5">
+            <geom name="geom5" class="/" type="capsule" size="0.056" rgba="0.71 0.38 0.31 1" fromto="0 0 0 0.51 0 -0.26"/>
+            <joint name="joint5" class="/" type="hinge" axis="0 1 0" limited="true" range="-55 55"/>
+          </body>
         </body>
-        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" range="-40 40"/>
-      </body>
-      <body name="body5" pos="0.055 0 0.048">
-        <geom name="geom5" class="/" type="capsule" size="0.067 0.32" rgba="0.089 0.86 0.68 1" pos="-0.044 0 0.31" zaxis="-0.088 0 0.62"/>
-        <body name="body6" pos="-0.027 0 0.2">
-          <geom name="geom6" class="/" type="capsule" size="0.046 0.42" rgba="0.059 0.29 0.1 1" pos="-0.37 0 -0.2" zaxis="-0.75 0 -0.4"/>
-          <joint name="joint6" class="/" type="hinge" axis="0 1 0" limited="true" range="-66 66"/>
+        <body name="body6" pos="-0.18 0 0.43">
+          <geom name="geom6" class="/" type="capsule" size="0.059" rgba="0.94 0.88 0.42 1" fromto="0 0 0 0.58 0 0.48"/>
+          <joint name="joint6" class="/" type="hinge" axis="0 1 0" limited="true" range="-40 40"/>
         </body>
-        <joint name="joint5" class="/" type="hinge" axis="0 1 0" limited="true" range="-47 47"/>
+        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" range="-34 34"/>
       </body>
       <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0" armature="0" damping="0"/>
       <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
@@ -40,11 +40,11 @@
     </body>
   </worldbody>
   <actuator>
-    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.6e+02" joint="joint2"/>
-    <motor name="motor4" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.7e+02" joint="joint4"/>
-    <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.4e+02" joint="joint1"/>
-    <motor name="motor6" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint6"/>
-    <motor name="motor5" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.4e+02" joint="joint5"/>
+    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint3"/>
+    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1e+02" joint="joint2"/>
+    <motor name="motor5" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.3e+02" joint="joint5"/>
+    <motor name="motor6" class="/" ctrllimited="true" ctrlrange="-1 1" gear="2e+02" joint="joint6"/>
+    <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.2e+02" joint="joint1"/>
   </actuator>
   <sensor>
     <subtreelinvel name="velocity" body="body"/>
