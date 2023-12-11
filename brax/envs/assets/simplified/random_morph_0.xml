@@ -1,0 +1,47 @@
+<mujoco model="morphology">
+  <default>
+    <default class="/"/>
+  </default>
+  <asset>
+    <texture name="texplane" type="2d" builtin="checker" rgb1="0.1 0.2 0.3" rgb2="0.2 0.3 0.4" width="300" height="300"/>
+    <material name="MatPlane" class="/" texture="texplane" texrepeat="20 20" specular="1" shininess="1" reflectance="0.5"/>
+  </asset>
+  <worldbody>
+    <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3" cutoff="1e+02" exponent="1" diffuse="1 1 1" specular="0.1 0.1 0.1"/>
+    <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane" rgba="1 1 1 1"/>
+    <body name="body" pos="0 0 0.1">
+      <geom name="geom0" class="/" type="capsule" size="0.056 0.37" rgba="0.73 0.41 0.27 1" pos="0.34 0 0.13" zaxis="0.68 0 0.26"/>
+      <body name="body1" pos="0.57 0 0.22">
+        <geom name="geom1" class="/" type="capsule" size="0.067 0.36" rgba="0.082 0.78 0.36 1" pos="-0.22 0 0.28" zaxis="-0.44 0 0.56"/>
+        <body name="body2" pos="-0.23 0 0.29">
+          <geom name="geom2" class="/" type="capsule" size="0.06 0.19" rgba="0.1 0.4 0.25 1" pos="0.063 0 0.18" zaxis="0.13 0 0.36"/>
+          <body name="body3" pos="0.078 0 0.22">
+            <geom name="geom3" class="/" type="capsule" size="0.041 0.41" rgba="0.48 0.97 0.52 1" pos="-0.36 0 0.18" zaxis="-0.73 0 0.36"/>
+            <body name="body4" pos="-0.45 0 0.23">
+              <geom name="geom4" class="/" type="capsule" size="0.045 0.36" rgba="0.63 0.2 0.38 1" pos="-0.33 0 -0.15" zaxis="-0.67 0 -0.29"/>
+              <body name="body5" pos="-0.41 0 -0.18">
+                <geom name="geom5" class="/" type="capsule" size="0.047 0.38" rgba="0.47 0.32 0.17 1" pos="-0.27 0 0.26" zaxis="-0.54 0 0.53"/>
+              </body>
+              <joint name="joint4" class="/" type="hinge" axis="0 1 0" limited="true" range="-40 40"/>
+            </body>
+            <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" range="-66 66"/>
+          </body>
+          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" range="-35 35"/>
+        </body>
+        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" range="-34 34"/>
+      </body>
+      <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0" armature="0" damping="0"/>
+      <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
+      <joint name="rooty" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="0" armature="0" damping="0"/>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="motor4" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.6e+02" joint="joint4"/>
+    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.3e+02" joint="joint3"/>
+    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.1e+02" joint="joint2"/>
+    <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint1"/>
+  </actuator>
+  <sensor>
+    <subtreelinvel name="velocity" body="body"/>
+  </sensor>
+</mujoco>
