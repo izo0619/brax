@@ -1,4 +1,5 @@
 <mujoco model="morphology">
+  <option timestep="0.01"/>
   <default>
     <default class="/"/>
   </default>
@@ -9,19 +10,23 @@
   <worldbody>
     <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3" cutoff="1e+02" exponent="1" diffuse="1 1 1" specular="0.1 0.1 0.1"/>
     <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane" rgba="1 1 1 1"/>
-    <body name="body" pos="0 0 0.89">
-      <geom name="geom0" class="/" type="capsule" size="0.04" rgba="0.048 0.75 0.23 1" fromto="0 0 0 -0.34 0 -0.22"/>
-      <body name="body1" pos="-0.15 0 -0.097">
-        <geom name="geom1" class="/" type="capsule" size="0.054" rgba="0.044 0.074 0.62 1" fromto="0 0 0 0.18 0 -0.27"/>
-        <body name="body2" pos="0.17 0 -0.25">
-          <geom name="geom2" class="/" type="capsule" size="0.058" rgba="0.044 0.27 0.83 1" fromto="0 0 0 -0.2 0 -0.45"/>
-          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" range="-49 49" armature="0.2"/>
+    <body name="body" pos="0 0 0.63">
+      <geom name="geom0" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.057" rgba="0.98 0.98 0.096 1" friction="0.6 0.1 0.1" fromto="0 0 0 0.17 0 0.27"/>
+      <body name="body1" pos="0.012 0 0.02">
+        <geom name="geom1" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.047" rgba="0.55 0.42 0.078 1" friction="0.6 0.1 0.1" fromto="0 0 0 -0.65 0 -0.12"/>
+        <body name="body2" pos="-0.58 0 -0.1">
+          <geom name="geom2" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.043" rgba="0.94 0.21 0.14 1" friction="0.6 0.1 0.1" fromto="0 0 0 0.17 0 -0.44"/>
+          <body name="body3" pos="0.065 0 -0.17">
+            <geom name="geom3" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.066" rgba="0.63 0.69 0.69 1" friction="0.6 0.1 0.1" fromto="0 0 0 0.42 0 -0.083"/>
+            <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="1e+02" range="-42 42" armature="0.2" damping="3.5"/>
+          </body>
+          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="1e+02" range="-63 63" armature="0.2" damping="3.5"/>
         </body>
-        <body name="body3" pos="0.15 0 -0.22">
-          <geom name="geom3" class="/" type="capsule" size="0.063" rgba="0.066 0.19 0.38 1" fromto="0 0 0 0.48 0 0.07"/>
-          <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" range="-65 65" armature="0.2"/>
-        </body>
-        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" range="-55 55" armature="0.2"/>
+        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="1e+02" range="-54 54" armature="0.2" damping="3.5"/>
+      </body>
+      <body name="body4" pos="0.066 0 0.11">
+        <geom name="geom4" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.07" rgba="0.086 0.61 0.74 1" friction="0.6 0.1 0.1" fromto="0 0 0 0.69 0 0.1"/>
+        <joint name="joint4" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="1e+02" range="-43 43" armature="0.2" damping="3.5"/>
       </body>
       <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0" armature="0" damping="0"/>
       <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
@@ -29,9 +34,10 @@
     </body>
   </worldbody>
   <actuator>
-    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.2e+02" joint="joint2"/>
-    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.1e+02" joint="joint3"/>
+    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint3"/>
+    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.7e+02" joint="joint2"/>
     <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint1"/>
+    <motor name="motor4" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.5e+02" joint="joint4"/>
   </actuator>
   <sensor>
     <subtreelinvel name="velocity" body="body"/>
