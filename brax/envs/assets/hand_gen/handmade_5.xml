@@ -15,11 +15,11 @@
         <body name="root" pos="0 0 0.05">
             <geom name="//unnamed_geom_1" class="/" type="capsule" size="0.05" rgba="0.6 0.6 0.6 1"
                 fromto="0 0 0 1 0 0" />
-            <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0"
+            <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="50"
                 armature="0.4" damping="0" />
-            <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0"
+            <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="50"
                 armature="0.4" damping="0" />
-            <joint name="rooty" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="0"
+            <joint name="rooty" class="/" type="hinge" axis="0 1 0" limited="false" stiffness="50"
                 armature="0.4" damping="0" />
             <body name="//unnamed_body_1" pos="1 0 0">
                 <joint name="joint1" class="/" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"
