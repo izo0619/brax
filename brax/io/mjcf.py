@@ -469,7 +469,7 @@ def load_model(mj: mujoco.MjModel) -> System:
     link.transform.rot[free_idx] = np.array([1.0, 0.0, 0.0, 0.0])
 
   sys = System(  # pytype: disable=wrong-arg-types  # jax-ndarray
-      dt=mj.opt.timestep,
+      dt=0.01,
       gravity=mj.opt.gravity,
       viscosity=mj.opt.viscosity,
       density=mj.opt.density,
