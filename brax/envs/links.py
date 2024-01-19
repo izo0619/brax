@@ -18,7 +18,7 @@ class Links(PipelineEnv):
                backend='generalized',
                i=0,
                **kwargs):
-        path = epath.resource_path('brax') / f'envs/assets/5_links/rdm_{i}.xml'
+        path = epath.resource_path('brax') / f'envs/assets/4_links/rdm_{i}.xml'
         sys = mjcf.load(path)
 
         n_frames = 4

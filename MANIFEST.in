@@ -5,6 +5,7 @@ include brax/envs/assets/100_gen_3d/*.xml
 include brax/envs/assets/hand_gen/*.xml
 include brax/envs/assets/simplified/*.xml
 include brax/envs/assets/5_links/*.xml
+include brax/envs/assets/4_links/*.xml
 recursive-include brax/experimental/barkour_v0 *.csv *.stl *.xml
 recursive-include brax/test_data *.xml *.stl *.obj *.urdf
 recursive-include brax/visualizer *
