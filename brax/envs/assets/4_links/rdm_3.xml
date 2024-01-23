@@ -10,19 +10,19 @@
   <worldbody>
     <light name="//unnamed_light_0" class="/" directional="true" pos="0 0 1.5" dir="0 0 -1.3" cutoff="1e+02" exponent="1" diffuse="1 1 1" specular="0.1 0.1 0.1"/>
     <geom name="ground" class="/" type="plane" size="15 15 0.5" material="MatPlane" rgba="1 1 1 1"/>
-    <body name="body" pos="0 0 0.1">
-      <geom name="geom0" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.06" rgba="0.045 0.84 0.28 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.52 0 0.068"/>
-      <body name="body1" pos="0.15 0 0.02">
-        <geom name="geom1" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.055" rgba="0.7 0.23 0.94 1" friction="0.4 0.1 0.1" fromto="0 0 0 -0.048 0 0.34"/>
-        <body name="body2" pos="-0.038 0 0.27">
-          <geom name="geom2" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.055" rgba="0.48 0.93 0.98 1" friction="0.4 0.1 0.1" fromto="0 0 0 -0.23 0 0.12"/>
-          <body name="body3" pos="-0.096 0 0.05">
-            <geom name="geom3" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.044" rgba="0.73 0.41 0.072 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.51 0 0.7"/>
-            <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-53 53" armature="0.1" damping="2"/>
+    <body name="body" pos="0 0 1">
+      <geom name="geom0" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.056" rgba="0.9 0.33 0.0037 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.58 0 0.23"/>
+      <body name="body1" pos="0.2 0 0.08">
+        <geom name="geom1" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.059" rgba="0.035 0.28 0.29 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.095 0 -0.22"/>
+        <body name="body2" pos="0.087 0 -0.2">
+          <geom name="geom2" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.057" rgba="0.11 0.58 0.89 1" friction="0.4 0.1 0.1" fromto="0 0 0 -0.73 0 -0.32"/>
+          <body name="body3" pos="-0.37 0 -0.16">
+            <geom name="geom3" class="/" type="capsule" contype="1" conaffinity="1" condim="3" size="0.046" rgba="0.84 0.49 0.61 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.3 0 -0.63"/>
+            <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-63 63" armature="0.1" damping="2"/>
           </body>
-          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-51 51" armature="0.1" damping="2"/>
+          <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-47 47" armature="0.1" damping="2"/>
         </body>
-        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-55 55" armature="0.1" damping="2"/>
+        <joint name="joint1" class="/" type="hinge" axis="0 1 0" limited="true" stiffness="20" range="-60 60" armature="0.1" damping="2"/>
       </body>
       <joint name="rootx" class="/" type="slide" axis="1 0 0" limited="false" stiffness="0" armature="0" damping="0"/>
       <joint name="rootz" class="/" type="slide" axis="0 0 1" limited="false" stiffness="0" armature="0" damping="0"/>
@@ -30,9 +30,9 @@
     </body>
   </worldbody>
   <actuator>
-    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1e+02" joint="joint3"/>
-    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.4e+02" joint="joint2"/>
-    <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.6e+02" joint="joint1"/>
+    <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.6e+02" joint="joint3"/>
+    <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.7e+02" joint="joint2"/>
+    <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.9e+02" joint="joint1"/>
   </actuator>
   <sensor>
     <subtreelinvel name="velocity" body="body"/>
