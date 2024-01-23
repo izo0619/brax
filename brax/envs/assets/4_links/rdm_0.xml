@@ -25,7 +25,7 @@
                     <geom name="geom2" class="/" type="capsule" contype="1" conaffinity="1"
                         condim="3" size="0.067" rgba="0.86 0.87 0.39 1" friction="0.4 0.1 0.1"
                         fromto="0 0 0 -0.099 0 -0.62" />
-                    <body name="body3" pos="-0.097 0 -0.6">
+                    <body name="body3" pos="-0.097 0 -0.3">
                         <geom name="geom3" class="/" type="capsule" contype="1" conaffinity="1"
                             condim="3" size="0.056"
                             rgba="0.43 0.9 0.1 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.72 0 -0.12" />
