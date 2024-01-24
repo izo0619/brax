@@ -27,12 +27,10 @@
                         fromto="0 0 0 -0.099 0 -0.62" />
                     <body name="body3" pos="-0.097 0 -0.6">
                         <geom name="geom3" class="/" type="capsule" contype="1" conaffinity="1"
-                            condim="3" size="0.056"
-                            rgba="0.43 0.9 0.1 1" friction="0.4 0.1 0.1" fromto="0 0 0 0.2 0 -0.12" />
-                        <!-- <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true"
-                            stiffness="20" range="-69
-                    69" armature="0.1"
-                            damping="2" /> -->
+                            condim="3" size="0.056" rgba="0.43 0.9 0.1 1" friction="0.4 0.1 0.1"
+                            fromto="0 0 0 0.72 0 -0.12" />
+                        <joint name="joint3" class="/" type="hinge" axis="0 1 0" limited="true"
+                            stiffness="20" range="-69 69" armature="0.1" damping="2" />
                     </body>
                     <joint name="joint2" class="/" type="hinge" axis="0 1 0" limited="true"
                         stiffness="20" range="-56 56" armature="0.1" damping="2" />
@@ -49,8 +47,8 @@
         </body>
     </worldbody>
     <actuator>
-        <!-- <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.2e+02"
-        joint="joint3"/> -->
+        <motor name="motor3" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.2e+02"
+            joint="joint3" />
         <motor name="motor2" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.8e+02"
             joint="joint2" />
         <motor name="motor1" class="/" ctrllimited="true" ctrlrange="-1 1" gear="1.2e+02"
